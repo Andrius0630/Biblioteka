@@ -1,0 +1,8 @@
+Haruki Murakami,Norwegian Wood,1987,296
+George Orwell,1984,1949,328
+Haruki Murakami,Kafka on the Shore,2002,505
+George Orwell,Animal Farm,1945,112
+Jane Austen,Pride and Prejudice,1813,432
+Gabriel Garcia Marquez,One Hundred Years of Solitude,1967,417
+Jane Austen,Sense and Sensibility,1811,409
+Gabriel Garcia Marquez,Love in the Time of Cholera,1985,368
