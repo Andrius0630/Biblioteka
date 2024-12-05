@@ -68,7 +68,7 @@ void initializeBooks(Book *books, char **buffer, unsigned short lineCount) {
     char *token;
     for (i = 0; i < lineCount; i++) {
         if (buffer[i][0] == '\0') continue;
-        
+        books[i].id = i+1;
         token = strtok(buffer[i], ",");
         strncpy(books[i].author, token, ARRAY_MAX - 1);
 
@@ -87,7 +87,7 @@ void initializeBooks(Book *books, char **buffer, unsigned short lineCount) {
 
 
 
-void createFileAuthor(Book *books, unsigned short lineCount) {
+/*void createFileAuthor(Book *books, unsigned short lineCount) {
     unsigned short i = 0, j = 0;
     for (i = 0; i < lineCount; i++) {
         for (j = 0; j < lineCount; j++) {
@@ -102,6 +102,17 @@ void createFileAuthor(Book *books, unsigned short lineCount) {
         }
     }
     
+}*/
+
+void updateFile(Book *books, unsigned short lineCount) {
+    unsigned short i = 0;
+    FILE *fptr = fopen("books.txt", "w");
+    if (fptr != NULL) {
+        for (i = 0; i < lineCount; i++) {
+            fprintf(fptr, "%s,%s,%d,%d,%s,%d\n", books[i].author, books[i].name, books[i].date, books[i].pages, books[i].isbn, books[i].stock);
+        }
+    } else exit(8);
+    fclose(fptr);
 }
 
 void clearMem(Book *books, unsigned short lineCount, char *filename, char **buffer) {

@@ -19,7 +19,7 @@ int main(void) {
     if (books == NULL) exit(9);
     
     initializeBooks(books, buffer, lineCount);
-    createFileAuthor(books, lineCount);
+    /*createFileAuthor(books, lineCount);*/
 
     renderMenu(books, lineCount);
     printf("\n");

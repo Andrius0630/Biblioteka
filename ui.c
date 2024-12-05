@@ -18,7 +18,7 @@ void getUserInput(char *buffer, unsigned short size) {
 
 
 void renderMenu(Book *books, unsigned short lineCount) {
-    char choice[INPUT_SIZE];
+    char choice[ARRAY_MAX];
     while (1) {
         system("clear");
         printf("Biblioteka\n\n\n1.Find book\n2.Take book\n3.Return book\n4.List all books available\n\n\n5.Modify mode\n6.Change user\n0.Exit\n\n\n");
@@ -30,16 +30,16 @@ void renderMenu(Book *books, unsigned short lineCount) {
                 findBook(books, lineCount);
                 break;
             case '2':
-                takeBook();
+                takeBook(books, lineCount);
                 break;
             case '3':
-                returnBook();
+                returnBook(books, lineCount);
                 break;
             case '4':
                 listBooks(books, lineCount);
                 break;
             case '5':
-                modifyMode();
+                modifyMode(books, lineCount);
                 break;
             case '6':
                 changeUser();
@@ -56,12 +56,12 @@ void renderMenu(Book *books, unsigned short lineCount) {
 }
 
 void listBooks(Book *books, unsigned short lineCount) {
-    char choice[INPUT_SIZE];
+    char choice[ARRAY_MAX];
+    unsigned short i = 0;
     system("clear");
     printf("Available books:\n");
-    for (unsigned short i = 0; i < lineCount; i++) {
-        printf("%d. AUTHOR: %s, NAME: %s, PUBLISHED IN: %d, PAGES: %d, ISBN: %s, IN STOCK: %d\n",
-               i + 1, books[i].author, books[i].name, books[i].date, books[i].pages, books[i].isbn, books[i].stock);
+    for (i = 0; i < lineCount; i++) {
+        printf("ID: %d. AUTHOR: %s, NAME: %s, PUBLISHED IN: %d, PAGES: %d, ISBN: %s, IN STOCK: %d\n",  books[i].id, books[i].author, books[i].name, books[i].date, books[i].pages, books[i].isbn, books[i].stock);
     }
 
     printf("\n\n1. Go back\n\n");
@@ -82,7 +82,8 @@ void listBooks(Book *books, unsigned short lineCount) {
 }
 
 void findBook(Book *books, unsigned short lineCount) {
-    char choice[INPUT_SIZE];
+    // todo: regex search
+    char choice[ARRAY_MAX];
     char found = 0;
     system("clear");
     printf("Enter book's author/name/ISBN:");
@@ -112,33 +113,154 @@ void findBook(Book *books, unsigned short lineCount) {
                 break;
         }
     }
-    
-    
 }
 
 
-void takeBook() {
-    char choice[INPUT_SIZE];
-    system("clear");
-    printf("Take book feature coming soon! Press Enter to return.\n");
-    getUserInput(choice, sizeof(choice));
+void takeBook(Book *books, unsigned short lineCount) {
+    char choice[ARRAY_MAX];
+    unsigned short i = 0;
+    while (1)
+    {
+        system("clear");
+        printf("Available books:\n");
+        for (i = 0; i < lineCount; i++) {
+            printf("ID: %d. AUTHOR: %s, NAME: %s, PUBLISHED IN: %d, PAGES: %d, ISBN: %s, IN STOCK: %d\n",  books[i].id, books[i].author, books[i].name, books[i].date, books[i].pages, books[i].isbn, books[i].stock);
+        }
+
+        printf("\n\nEnter book's ID or 0 to finish: ");
+        getUserInput(choice, sizeof(choice));
+        if (choice[0] == '0') {
+            updateFile(books, lineCount);
+            return;
+        }
+        else {
+            for (i = 0; i < lineCount; i++)
+            {
+                if (books[i].id == atoi(choice) && books[i].id > 0) {
+                    printf("You have chosen book with ID and took it: %d. Press Enter to continue...\n", books[i].id);
+                    books[i].stock--;
+                    getUserInput(choice, sizeof(choice));
+                }
+            }
+        }
+    }
 }
 
-void returnBook() {
-    char choice[INPUT_SIZE];
-    system("clear");
-    printf("Return book feature coming soon! Press Enter to return.\n");
-    getUserInput(choice, sizeof(choice));
-}
-void modifyMode() {
+void returnBook(Book *books, unsigned short lineCount) {
+    char choice[ARRAY_MAX];
+    unsigned short i = 0;
+    while (1)
+    {
+        system("clear");
+        printf("Available books:\n");
+        for (i = 0; i < lineCount; i++) {
+            printf("ID: %d. AUTHOR: %s, NAME: %s, PUBLISHED IN: %d, PAGES: %d, ISBN: %s, IN STOCK: %d\n",  books[i].id, books[i].author, books[i].name, books[i].date, books[i].pages, books[i].isbn, books[i].stock);
+        }
 
-    char choice[INPUT_SIZE];
-    system("clear");
-    printf("Modify mode feature coming soon! Press Enter to return.\n");
-    getUserInput(choice, sizeof(choice));
+        printf("\n\nEnter book's ID or 0 to finish: ");
+        getUserInput(choice, sizeof(choice));
+        if (choice[0] == '0') {
+            updateFile(books, lineCount);
+            return;
+        }
+        else {
+            for (i = 0; i < lineCount; i++)
+            {
+                if (books[i].id == atoi(choice) && books[i].id > 0) {
+                    printf("You have chosen book with ID and returned it: %d. Press Enter to continue...\n", books[i].id);
+                    books[i].stock++;
+                    getUserInput(choice, sizeof(choice));
+                }
+            }
+        }
+    }
+}
+
+void modifyMode(Book *books, unsigned short lineCount) {
+    char choice[ARRAY_MAX];
+    unsigned short i = 0, id = 1;
+    while (1)
+    {
+        system("clear");
+        printf("Available books:\n");
+        for (i = 0; i < lineCount; i++) {
+            printf("ID: %d. AUTHOR: %s, NAME: %s, PUBLISHED IN: %d, PAGES: %d, ISBN: %s, IN STOCK: %d\n",  books[i].id, books[i].author, books[i].name, books[i].date, books[i].pages, books[i].isbn, books[i].stock);
+        }
+
+        printf("\n\nEnter book's ID to modify or 0 to finish: ");
+        getUserInput(choice, sizeof(choice));
+        if (choice[0] == '0') return;
+        else {
+            id = atoi(choice) - 1;
+            while (1) {
+                system("clear");
+                printf("1. AUTHOR: %s, 2. NAME: %s, 3. PUBLISHED IN: %d, 4. PAGES: %d, 5. ISBN: %s, 6. IN STOCK: %d\n",  books[id].author, books[id].name, books[id].date, books[id].pages, books[id].isbn, books[id].stock);
+                printf("Enter what you want to modify or 0 to finish: ");
+                getUserInput(choice, sizeof(choice));
+                if (choice[0] == '0') return;
+                else {
+                    switch (choice[0]) {
+                        case '1':
+                            printf("Enter new author: ");
+                            getUserInput(choice, sizeof(choice));
+                            strcpy(books[id].author, choice);
+                            updateFile(books, lineCount);
+                            printf("Changes saved! Press Enter to continue...\n");
+                            getUserInput(choice, sizeof(choice));
+                            break;
+                        case '2':
+                            printf("Enter new name: ");
+                            getUserInput(choice, sizeof(choice));
+                            strcpy(books[id].name, choice);
+                            updateFile(books, lineCount);
+                            printf("Changes saved! Press Enter to continue...\n");
+                            getUserInput(choice, sizeof(choice));
+                            break;
+                        case '3':
+                            printf("Enter new published year: ");
+                            getUserInput(choice, sizeof(choice));
+                            books[id].date = atoi(choice);
+                            updateFile(books, lineCount);
+                            printf("Changes saved! Press Enter to continue...\n");
+                            getUserInput(choice, sizeof(choice));
+                            break;
+                        case '4':
+                            printf("Enter new number of pages: ");
+                            getUserInput(choice, sizeof(choice));
+                            books[id].pages = atoi(choice);
+                            updateFile(books, lineCount);
+                            printf("Changes saved! Press Enter to continue...\n");
+                            getUserInput(choice, sizeof(choice));
+                            break;
+                        case '5':
+                            printf("Enter new ISBN: ");
+                            getUserInput(choice, sizeof(choice));
+                            strcpy(books[id].isbn, choice);
+                            updateFile(books, lineCount);
+                            printf("Changes saved! Press Enter to continue...\n");
+                            getUserInput(choice, sizeof(choice));
+                            break;
+                        case '6':
+                            printf("Enter new number of books in stock: ");
+                            getUserInput(choice, sizeof(choice));
+                            books[id].stock = atoi(choice);
+                            updateFile(books, lineCount);
+                            printf("Changes saved! Press Enter to continue...\n");
+                            getUserInput(choice, sizeof(choice));
+                            break;
+                        default:
+                            printf("Wrong input! Press Enter to show list again.\n");
+                            getUserInput(choice, sizeof(choice));
+                            break;
+                    }
+                }
+                
+            }
+        }
+    }
 }
 void changeUser() {
-    char choice[INPUT_SIZE];
+    char choice[ARRAY_MAX];
     system("clear");
     printf("Change user feature coming soon! Press Enter to return.\n");
     getUserInput(choice, sizeof(choice));
