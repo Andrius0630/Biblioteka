@@ -9,8 +9,9 @@ int main(void) {
     char *filename = NULL;
     enterFileName(&filename);
     */
-    
+
     char **buffer = NULL;
+    char **bufferUsers = NULL;
     unsigned short lineCount = 0;
 
     readFile(filename, &lineCount, &buffer);

@@ -3,16 +3,22 @@
 #include <string.h>
 #include "booksStruct.h"
 
-
+/*
+    todo: 
+        1. login/signIn menu
+        2. regex search
+        3. add and delete books
+    bruh 💀💀💀
+*/
 
 void getUserInput(char *buffer, unsigned short size) {
     if (fgets(buffer, size, stdin)) {
-        // Check if newline is present and replace it with null terminator
+
         char *c = strchr(buffer, '\n');
-        if (c) *c = '\0'; // Replace newline with null terminator
+        if (c) *c = '\0'; 
     } else {
-        clearerr(stdin); // Reset input stream if fgets fails
-        buffer[0] = '\0'; // Ensure buffer is an empty string
+        clearerr(stdin);
+        buffer[0] = '\0'; 
     }
 }
 
@@ -21,7 +27,7 @@ void renderMenu(Book *books, unsigned short lineCount) {
     char choice[ARRAY_MAX];
     while (1) {
         system("clear");
-        printf("Biblioteka\n\n\n1.Find book\n2.Take book\n3.Return book\n4.List all books available\n\n\n5.Modify mode\n6.Change user\n0.Exit\n\n\n");
+        printf("Biblioteka\n\n\n1.Find book\n2.Take book\n3.Return book\n4.List all books available\n\n\n5.Modify mode\n6.Change user\n7.Logout\n\n0.Exit\n\n\n");
 
         printf("Enter a number: ");
         getUserInput(choice, sizeof(choice));
@@ -44,6 +50,9 @@ void renderMenu(Book *books, unsigned short lineCount) {
             case '6':
                 changeUser();
                 break;
+            case '7':
+                logoutUser();
+                break;
             case '0':
                 exit(0);
                 break;
@@ -64,14 +73,14 @@ void listBooks(Book *books, unsigned short lineCount) {
         printf("ID: %d. AUTHOR: %s, NAME: %s, PUBLISHED IN: %d, PAGES: %d, ISBN: %s, IN STOCK: %d\n",  books[i].id, books[i].author, books[i].name, books[i].date, books[i].pages, books[i].isbn, books[i].stock);
     }
 
-    printf("\n\n1. Go back\n\n");
+    printf("\n\n0. Go back\n\n");
 
     printf("Enter a number: ");
     getUserInput(choice, sizeof(choice));
     while (1)
     {
         switch (choice[0]) {
-            case '1':
+            case '0':
                 return;
             default:
                 printf("\nWrong input! Enter a number again: ");
@@ -82,7 +91,7 @@ void listBooks(Book *books, unsigned short lineCount) {
 }
 
 void findBook(Book *books, unsigned short lineCount) {
-    // todo: regex search
+    /* todo: regex search */
     char choice[ARRAY_MAX];
     char found = 0;
     system("clear");
@@ -98,14 +107,14 @@ void findBook(Book *books, unsigned short lineCount) {
         }
     }
     if(!found) printf("Nothing was found! \n");
-    printf("\n\n1. Go back\n\n");
+    printf("\n\n0. Go back\n\n");
 
     printf("Enter a number: ");
     getUserInput(choice, sizeof(choice));
     while (1)
     {
         switch (choice[0]) {
-            case '1':
+            case '0':
                 return;
             default:
                 printf("Wrong input! Enter a number again: ");
@@ -177,6 +186,7 @@ void returnBook(Book *books, unsigned short lineCount) {
 }
 
 void modifyMode(Book *books, unsigned short lineCount) {
+    /* todo: add and delete */
     char choice[ARRAY_MAX];
     unsigned short i = 0, id = 1;
     while (1)
@@ -263,5 +273,33 @@ void changeUser() {
     char choice[ARRAY_MAX];
     system("clear");
     printf("Change user feature coming soon! Press Enter to return.\n");
+    getUserInput(choice, sizeof(choice));
+}
+
+void logoutUser() {
+    char choice[ARRAY_MAX];
+    system("clear");
+    printf("User logout feature coming soon! Press Enter to return.\n");
+    getUserInput(choice, sizeof(choice));
+}
+
+void loginUser() {
+    char choice[ARRAY_MAX];
+    system("clear");
+    printf("User login feature coming soon! Press Enter to return.\n");
+    getUserInput(choice, sizeof(choice));
+}
+
+void createUser() {
+    char choice[ARRAY_MAX];
+    system("clear");
+    printf("User creation feature coming soon! Press Enter to return.\n");
+    getUserInput(choice, sizeof(choice));
+}
+
+void modifyUser() {
+    char choice[ARRAY_MAX];
+    system("clear");
+    printf("User modify feature coming soon! Press Enter to return.\n");
     getUserInput(choice, sizeof(choice));
 }

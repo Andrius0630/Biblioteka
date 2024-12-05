@@ -13,8 +13,6 @@ typedef struct
     unsigned short stock;
 }Book;
 
-extern Book *books;
-
 void renderMenu(Book *books, unsigned short lineCount);
 
 void getUserInput(char *buffer, unsigned short size);
@@ -25,6 +23,7 @@ void returnBook(Book *books, unsigned short lineCount);
 void listBooks(Book *books, unsigned short lineCount);
 void modifyMode(Book *books, unsigned short lineCount);
 void changeUser();
+void logoutUser();
 
 
 
