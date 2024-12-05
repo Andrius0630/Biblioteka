@@ -3,95 +3,143 @@
 #include <string.h>
 #include "booksStruct.h"
 
+
+
+void getUserInput(char *buffer, unsigned short size) {
+    if (fgets(buffer, size, stdin)) {
+        // Check if newline is present and replace it with null terminator
+        char *c = strchr(buffer, '\n');
+        if (c) *c = '\0'; // Replace newline with null terminator
+    } else {
+        clearerr(stdin); // Reset input stream if fgets fails
+        buffer[0] = '\0'; // Ensure buffer is an empty string
+    }
+}
+
+
 void renderMenu(Book *books, unsigned short lineCount) {
-    system("clear");
-    printf("Biblioteka\n\n\n1.Find book by name\n2.Find book using ISBN\n3.Take book\n4.Return book\n5.List all books available\n\n\n6.Modify mode\n7.Change user\n8.Exit\n\n\n");
+    char choice[INPUT_SIZE];
+    while (1) {
+        system("clear");
+        printf("Biblioteka\n\n\n1.Find book\n2.Take book\n3.Return book\n4.List all books available\n\n\n5.Modify mode\n6.Change user\n0.Exit\n\n\n");
 
-    printf("Enter a number: ");
-    char choice = getc(stdin);
-    switch (choice) {
-        case '1':
-            break;
-        case '2':
-            break;
-        case '3':
-            break;
-        case '4':
-            break;
-        case '5':
-            listBooks(books, lineCount);
-            break;
-        case '6':
-            break;
-        case '7':
-            break;
-        case '8':
-            exit(0);
-            break;
-        default:
-            printf("Wrong input!\n");
-            break;
-    }
-}
-
-void findBook(unsigned short lineCount){
-    unsigned short size = 20, i = 0;
-    char c = 1;
-    char **searchWord = malloc(size * sizeof(char));
-    if (*searchWord == NULL) exit(1);
-    char *newsearchWord = NULL;
-    system("clear");
-    printf("Search for...: ");
-    while (c)
-    {
-        c = getc(stdin);
-        if(c == '\n' || c == EOF) c = 0;
-        if (i >= size) {
-            size += 5;
-            newsearchWord = realloc(*searchWord, size * sizeof(char));
-            if (newsearchWord == NULL)
-            {
-                free(*searchWord);
-                exit(2);
-            }
-            *searchWord = newsearchWord;
-        }
-        (*searchWord)[i++] = c;
-    }
-    (*searchWord)[i - 1] = '\0';
-
-    for (i = 0; i < lineCount; i++)
-    {
-        if (strcmp(books[i].author, searchWord) == 0 || strcmp(books[i].name, searchWord) == 0) {
-            printf("%d. AUTHOR: %s, NAME: %s, PUBLISHED IN: %d, PAGES: %d, ISBN: %s, IN STOCK: %d\n", i+1, books[i].author, books[i].name, books[i].date, books[i].pages, books[i].isbn, books[i].stock);
+        printf("Enter a number: ");
+        getUserInput(choice, sizeof(choice));
+        switch (choice[0]) {
+            case '1':
+                findBook(books, lineCount);
+                break;
+            case '2':
+                takeBook();
+                break;
+            case '3':
+                returnBook();
+                break;
+            case '4':
+                listBooks(books, lineCount);
+                break;
+            case '5':
+                modifyMode();
+                break;
+            case '6':
+                changeUser();
+                break;
+            case '0':
+                exit(0);
+                break;
+            default:
+                printf("Wrong input! Press Enter to try again.\n");
+                getUserInput(choice, sizeof(choice));
+                break;
         }
     }
-    free(searchWord);
-    free(*searchWord);
 }
-
-void findBookISBN() {
-
-    
-}
-
-void takeBook(){
-    
-}
-
-void returnBook(){
-    
-}
-
 
 void listBooks(Book *books, unsigned short lineCount) {
+    char choice[INPUT_SIZE];
     system("clear");
     printf("Available books:\n");
-    unsigned short i = 0;
-    for (i = 0; i < lineCount; i++)
-    {
-        printf("%d. AUTHOR: %s, NAME: %s, PUBLISHED IN: %d, PAGES: %d, ISBN: %s, IN STOCK: %d\n", i+1, books[i].author, books[i].name, books[i].date, books[i].pages, books[i].isbn, books[i].stock);
+    for (unsigned short i = 0; i < lineCount; i++) {
+        printf("%d. AUTHOR: %s, NAME: %s, PUBLISHED IN: %d, PAGES: %d, ISBN: %s, IN STOCK: %d\n",
+               i + 1, books[i].author, books[i].name, books[i].date, books[i].pages, books[i].isbn, books[i].stock);
+    }
 
+    printf("\n\n1. Go back\n\n");
+
+    printf("Enter a number: ");
+    getUserInput(choice, sizeof(choice));
+    while (1)
+    {
+        switch (choice[0]) {
+            case '1':
+                return;
+            default:
+                printf("\nWrong input! Enter a number again: ");
+                getUserInput(choice, sizeof(choice));
+                break;
+        }
+    }
+}
+
+void findBook(Book *books, unsigned short lineCount) {
+    char choice[INPUT_SIZE];
+    char found = 0;
+    system("clear");
+    printf("Enter book's author/name/ISBN:");
+    unsigned short i = 0;
+
+    getUserInput(choice, sizeof(choice));
+    printf("\nSearch results:\n");
+    for (i = 0; i < lineCount; i++) {
+        if (strcmp(books[i].author, choice) == 0 || strcmp(books[i].name, choice) == 0 || strcmp(books[i].isbn, choice) == 0) {
+                printf("%s,%s,%d,%d,%s,%d\n", books[i].author, books[i].name, books[i].date, books[i].pages, books[i].isbn, books[i].stock);
+                found = 1;
+        }
+    }
+    if(!found) printf("Nothing was found! \n");
+    printf("\n\n1. Go back\n\n");
+
+    printf("Enter a number: ");
+    getUserInput(choice, sizeof(choice));
+    while (1)
+    {
+        switch (choice[0]) {
+            case '1':
+                return;
+            default:
+                printf("Wrong input! Enter a number again: ");
+                getUserInput(choice, sizeof(choice));
+                break;
+        }
     }
     
+    
+}
+
+
+void takeBook() {
+    char choice[INPUT_SIZE];
+    system("clear");
+    printf("Take book feature coming soon! Press Enter to return.\n");
+    getUserInput(choice, sizeof(choice));
+}
+
+void returnBook() {
+    char choice[INPUT_SIZE];
+    system("clear");
+    printf("Return book feature coming soon! Press Enter to return.\n");
+    getUserInput(choice, sizeof(choice));
+}
+void modifyMode() {
+
+    char choice[INPUT_SIZE];
+    system("clear");
+    printf("Modify mode feature coming soon! Press Enter to return.\n");
+    getUserInput(choice, sizeof(choice));
+}
+void changeUser() {
+    char choice[INPUT_SIZE];
+    system("clear");
+    printf("Change user feature coming soon! Press Enter to return.\n");
+    getUserInput(choice, sizeof(choice));
 }

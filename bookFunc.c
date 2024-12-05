@@ -3,7 +3,7 @@
 #include <string.h>
 #include "booksStruct.h"
 
-void enterFileName(char **filename) {
+/*void enterFileName(char **filename) {
     unsigned short size = 10, i = 0;
     char c = 1;
     *filename = malloc(size * sizeof(char));
@@ -26,7 +26,7 @@ void enterFileName(char **filename) {
         (*filename)[i++] = c;
     }
     (*filename)[i - 1] = '\0';
-}
+}*/
 
 void readFile(char *filename, unsigned short *lineCount, char ***buffer) {
     unsigned short i = 0, size = 50;
@@ -53,7 +53,7 @@ void readFile(char *filename, unsigned short *lineCount, char ***buffer) {
             line[i++] = c;
         }
         line[i] = '\0';
-        if(c == EOF && i == 0) {free(line); exit(6);}
+        if (i == 0) {free(line); if (c == EOF) break; continue;}
         *buffer = realloc(*buffer, sizeof(char*) * (*lineCount + 1));
         if (*buffer == NULL) {free(line); fclose(fptr); exit(7);}
         (*buffer)[*lineCount] = line;
@@ -67,6 +67,8 @@ void initializeBooks(Book *books, char **buffer, unsigned short lineCount) {
     unsigned short i = 0;
     char *token;
     for (i = 0; i < lineCount; i++) {
+        if (buffer[i][0] == '\0') continue;
+        
         token = strtok(buffer[i], ",");
         strncpy(books[i].author, token, ARRAY_MAX - 1);
 
