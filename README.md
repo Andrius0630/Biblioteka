@@ -7,6 +7,7 @@ This is our a group project.
 2. register a new user
 3. books should be written to user account
 4. regex search (optional)
+5. better ui using ncurses library
 ```
 
 ## Structure of books.txt file
