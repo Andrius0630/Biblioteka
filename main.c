@@ -3,32 +3,39 @@
 #include "booksStruct.h"
 
 int main(void) {
-    char *filename = "books.txt";
-    
     /*
     char *filename = NULL;
     enterFileName(&filename);
     */
 
-    char **buffer = NULL;
-    char **bufferUsers = NULL;
-    unsigned short lineCount = 0;
-
-    readFile(filename, &lineCount, &buffer);
     
-    Book *books = malloc(lineCount * sizeof(Book));
-    if (books == NULL) exit(9);
+    char **bufferPasswd = NULL;
+    unsigned short lineCountPasswd = 0, i = 0;
     
-    initializeBooks(books, buffer, lineCount);
+    readFilePasswd(&lineCountPasswd, &bufferPasswd);
+    
+    User *users = malloc(lineCountPasswd * sizeof(User));
+    if (users == NULL) exit(9);
+    
     /*createFileAuthor(books, lineCount);*/
-
-    renderMenu(books, lineCount);
-    printf("\n");
-
+    initializePasswd(users, bufferPasswd, lineCountPasswd);
+    renderLogIn(users, lineCountPasswd);
 
 
 
-    clearMem(books, lineCount, filename, buffer);
+
+    
+    for (i = 0; i < lineCountPasswd; i++) {
+        free(bufferPasswd[i]);
+    }
+
+    
+    free(bufferPasswd);
+    
+    free(users);
+    /*free(filenameUserData);
+    free(filenamePasswd);*/
+
 
     printf("Done!\n");
     return 0;

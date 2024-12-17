@@ -22,14 +22,47 @@ void getUserInput(char *buffer, unsigned short size) {
     }
 }
 
-
-void renderMenu(Book *books, unsigned short lineCount) {
+void renderLogIn(User *users, unsigned short lineCountPasswd) {
     char choice[ARRAY_MAX];
     while (1) {
         system("clear");
-        printf("Biblioteka\n\n\n1.Find book\n2.Take book\n3.Return book\n4.List all books available\n\n\n5.Modify mode\n6.Change user\n7.Logout\n\n0.Exit\n\n\n");
+        printf("Registration/Login Menu \n\n\n1.Login\n2.Register new user\n\n0.Exit\n\n\n");
+        printf("Choose an option: ");
+        getUserInput(choice, sizeof(choice));
+        switch (choice[0]) {
+            case '1':
+                loginUser(users, lineCountPasswd);
+                break;
+            case '2':
+                createUser();
+                break;
+            case '0':
+                system("clear");
+                return;
+            default:
+                printf("Wrong input! Press Enter to try again.\n");
+                getUserInput(choice, sizeof(choice));
+                break;
+        }
+        
+    }
+}
 
-        printf("Enter a number: ");
+void renderMainMenuUser(User *users, unsigned short userInUse) {
+    unsigned short lineCount, i;
+    char choice[ARRAY_MAX];
+    while (1) {
+        lineCount = 0;
+        i = 0;
+        char **buffer = NULL;
+        readFile(&lineCount, &buffer);
+        Book *books = malloc(lineCount * sizeof(Book));
+        if (books == NULL) exit(9);
+        initializeBooks(books, buffer, lineCount);
+        system("clear");
+        printf("Biblioteka\n\nWelcome back, %s\n\n1.Find book\n2.Take book\n3.Return book\n4.List all books available\n\n\n0.Logout\n\n\n", users[userInUse].name);
+
+        printf("Choose an option: ");
         getUserInput(choice, sizeof(choice));
         switch (choice[0]) {
             case '1':
@@ -44,23 +77,60 @@ void renderMenu(Book *books, unsigned short lineCount) {
             case '4':
                 listBooks(books, lineCount);
                 break;
-            case '5':
-                modifyMode(books, lineCount);
-                break;
-            case '6':
-                changeUser();
-                break;
-            case '7':
-                logoutUser();
-                break;
             case '0':
-                exit(0);
-                break;
+                return;
             default:
                 printf("Wrong input! Press Enter to try again.\n");
                 getUserInput(choice, sizeof(choice));
                 break;
         }
+        for (i = 0; i < lineCount; i++) {
+            free(buffer[i]);
+        }
+        free(buffer);
+        free(books);
+    }
+}
+
+void renderMainMenuAdmin(User *users, unsigned short userInUse) {
+    
+    unsigned short lineCount, i;
+    char choice[ARRAY_MAX];
+    while (1) {
+        lineCount = 0;
+        i = 0;
+        char **buffer = NULL;
+        readFile(&lineCount, &buffer);
+        Book *books = malloc(lineCount * sizeof(Book));
+        if (books == NULL) exit(9);
+        initializeBooks(books, buffer, lineCount);
+        system("clear");
+        printf("Biblioteka\n\nWelcome back, %s\n\n1.List all books available\n\n2.Modify or delete mode\n3.Add new book\n\n0.Logout\n\n\n", users[userInUse].name);
+
+        printf("Choose an option: ");
+        getUserInput(choice, sizeof(choice));
+        switch (choice[0]) {
+            case '1':
+                listBooks(books, lineCount);
+                break;
+            case '2':
+                modifyMode(books, lineCount);
+                break;
+            case '3':
+                addNewMode();
+                break;
+            case '0':
+                return;
+            default:
+                printf("Wrong input! Press Enter to try again.\n");
+                getUserInput(choice, sizeof(choice));
+                break;
+        }
+        for (i = 0; i < lineCount; i++) {
+            free(buffer[i]);
+        }
+        free(buffer);
+        free(books);
     }
 }
 
@@ -70,12 +140,12 @@ void listBooks(Book *books, unsigned short lineCount) {
     system("clear");
     printf("Available books:\n");
     for (i = 0; i < lineCount; i++) {
-        printf("ID: %d. AUTHOR: %s, NAME: %s, PUBLISHED IN: %d, PAGES: %d, ISBN: %s, IN STOCK: %d\n",  books[i].id, books[i].author, books[i].name, books[i].date, books[i].pages, books[i].isbn, books[i].stock);
+        if (books[i].stock > 0) printf("ID: %d. AUTHOR: %s, NAME: %s, PUBLISHED IN: %d, PAGES: %d, ISBN: %s, IN STOCK: %d\n",  books[i].id, books[i].author, books[i].name, books[i].date, books[i].pages, books[i].isbn, books[i].stock);
     }
 
     printf("\n\n0. Go back\n\n");
 
-    printf("Enter a number: ");
+    printf("Choose an option: ");
     getUserInput(choice, sizeof(choice));
     while (1)
     {
@@ -83,7 +153,7 @@ void listBooks(Book *books, unsigned short lineCount) {
             case '0':
                 return;
             default:
-                printf("\nWrong input! Enter a number again: ");
+                printf("\nWrong input! Choose an option again: ");
                 getUserInput(choice, sizeof(choice));
                 break;
         }
@@ -109,7 +179,7 @@ void findBook(Book *books, unsigned short lineCount) {
     if(!found) printf("Nothing was found! \n");
     printf("\n\n0. Go back\n\n");
 
-    printf("Enter a number: ");
+    printf("Choose an option: ");
     getUserInput(choice, sizeof(choice));
     while (1)
     {
@@ -117,13 +187,12 @@ void findBook(Book *books, unsigned short lineCount) {
             case '0':
                 return;
             default:
-                printf("Wrong input! Enter a number again: ");
+                printf("Wrong input! Choose an option again: ");
                 getUserInput(choice, sizeof(choice));
                 break;
         }
     }
 }
-
 
 void takeBook(Book *books, unsigned short lineCount) {
     char choice[ARRAY_MAX];
@@ -186,7 +255,6 @@ void returnBook(Book *books, unsigned short lineCount) {
 }
 
 void modifyMode(Book *books, unsigned short lineCount) {
-    /* todo: add and delete */
     char choice[ARRAY_MAX];
     unsigned short i = 0, id = 1;
     while (1)
@@ -269,37 +337,84 @@ void modifyMode(Book *books, unsigned short lineCount) {
         }
     }
 }
-void changeUser() {
+
+void addNewMode() {
+    char author[ARRAY_MAX];
+    char name[ARRAY_MAX];
+    char date[ARRAY_MAX];
+    char pages[ARRAY_MAX];
+    char isbn[ARRAY_MAX];
+    char stock[ARRAY_MAX];
     char choice[ARRAY_MAX];
     system("clear");
-    printf("Change user feature coming soon! Press Enter to return.\n");
+    printf("Enter author: ");
+    getUserInput(author, sizeof(author));
+
+    printf("Enter name: ");
+    getUserInput(name, sizeof(name));
+    
+    printf("Enter year when it was published: ");
+    getUserInput(date, sizeof(date));
+
+    printf("Enter page count: ");
+    getUserInput(pages, sizeof(pages));
+    
+    printf("Enter ISBN: ");
+    getUserInput(isbn, sizeof(isbn));
+
+    printf("Enter how many books will be in stock: ");
+    getUserInput(stock, sizeof(stock));
+
+    printf("\nSuccess!. Press Enter to continue...");
     getUserInput(choice, sizeof(choice));
+
+    appendToFile(author, name, date, pages, isbn, stock);
 }
 
-void logoutUser() {
-    char choice[ARRAY_MAX];
-    system("clear");
-    printf("User logout feature coming soon! Press Enter to return.\n");
-    getUserInput(choice, sizeof(choice));
-}
+void loginUser(User *users, unsigned short lineCountPasswd) {
+    char username[ARRAY_MAX];
+    char passwd[ARRAY_MAX];
+    unsigned short i = 0;
+    char found = 0, attempts = 4;
 
-void loginUser() {
-    char choice[ARRAY_MAX];
-    system("clear");
-    printf("User login feature coming soon! Press Enter to return.\n");
-    getUserInput(choice, sizeof(choice));
+    while (attempts > 0)
+    {
+        system("clear");
+        printf("Enter name: ");
+        getUserInput(username, sizeof(username));
+
+        printf("Enter password: ");
+        getUserInput(passwd, sizeof(passwd));
+        for (i = 0; i < lineCountPasswd; i++) {
+            if (strcmp(users[i].name, username) == 0 && strcmp(users[i].passwd, passwd) == 0 && strcmp(users[i].name, "admin") == 0) {
+                found = 1;
+                renderMainMenuAdmin(users, i);
+                return;
+            }
+            if (strcmp(users[i].name, username) == 0 && strcmp(users[i].passwd, passwd) == 0 && strcmp(users[i].name, "admin") != 0) {
+                found = 1;
+                renderMainMenuUser(users, i);
+                return;
+            }
+        }
+        if (!found) 
+        {
+            attempts--;
+            printf("\nInvalid username or password, %d attempts left. Press Enter to try again.\n", attempts);
+            getUserInput(passwd, sizeof(passwd));
+            
+        }
+            
+    }
+    
+
+    
+    
 }
 
 void createUser() {
     char choice[ARRAY_MAX];
     system("clear");
     printf("User creation feature coming soon! Press Enter to return.\n");
-    getUserInput(choice, sizeof(choice));
-}
-
-void modifyUser() {
-    char choice[ARRAY_MAX];
-    system("clear");
-    printf("User modify feature coming soon! Press Enter to return.\n");
     getUserInput(choice, sizeof(choice));
 }

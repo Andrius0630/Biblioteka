@@ -28,15 +28,15 @@
     (*filename)[i - 1] = '\0';
 }*/
 
-void readFile(char *filename, unsigned short *lineCount, char ***buffer) {
-    unsigned short i = 0, size = 50;
+void readFile(unsigned short *lineCount, char ***buffer) {
+    unsigned short i = 0, size = READ_SIZE;
     char c = 1;
     char *tmp = NULL;
     char *line = NULL;
-    FILE *fptr = fopen(filename, "r");
-    if (fptr == NULL) {printf("Error! File %s is not found.\n", filename); free(filename); exit(3);}
+    FILE *fptr = fopen(BOOKS_FILE, "r");
+    if (fptr == NULL) {printf("Error! File %s is not found.\n", BOOKS_FILE);exit(3);}
     while (1) {
-        size = 50;
+        size = READ_SIZE;
         i = 0;
         line = malloc(size * sizeof(char));
         if (line == NULL) {
@@ -44,7 +44,7 @@ void readFile(char *filename, unsigned short *lineCount, char ***buffer) {
             exit(4);
         }
         while ((c = fgetc(fptr)) != '\n' && c != EOF) {
-            if(i > size) {
+            if(i >= size) {
                 size += 10;
                 tmp = realloc(line, size * sizeof(char));
                 if(tmp == NULL) {free(line); fclose(fptr); exit(5);}
@@ -71,6 +71,8 @@ void initializeBooks(Book *books, char **buffer, unsigned short lineCount) {
         books[i].id = i+1;
         token = strtok(buffer[i], ",");
         strncpy(books[i].author, token, ARRAY_MAX - 1);
+        books[i].author[ARRAY_MAX - 1] = '\0';
+
 
         token = strtok(NULL, ",");
         strncpy(books[i].name, token, ARRAY_MAX - 1);
@@ -106,21 +108,75 @@ void initializeBooks(Book *books, char **buffer, unsigned short lineCount) {
 
 void updateFile(Book *books, unsigned short lineCount) {
     unsigned short i = 0;
-    FILE *fptr = fopen("books.txt", "w");
+    FILE *fptr = fopen(BOOKS_FILE, "w");
     if (fptr != NULL) {
         for (i = 0; i < lineCount; i++) {
-            fprintf(fptr, "%s,%s,%d,%d,%s,%d\n", books[i].author, books[i].name, books[i].date, books[i].pages, books[i].isbn, books[i].stock);
+            if (books[i].stock > 0) fprintf(fptr, "%s,%s,%d,%d,%s,%d\n", books[i].author, books[i].name, books[i].date, books[i].pages, books[i].isbn, books[i].stock);
         }
     } else exit(8);
     fclose(fptr);
 }
 
-void clearMem(Book *books, unsigned short lineCount, char *filename, char **buffer) {
-    unsigned short i = 0;
-    for (i = 0; i < lineCount; i++) {
-        free(buffer[i]);
+void appendToFile(char *author, char *name, char *date, char *pages, char *isbn, char *stock) {
+    FILE *fptr = fopen(BOOKS_FILE, "a");
+    if (fptr != NULL) {
+        if (atoi(stock) > 0) {
+            fprintf(fptr, "\n%s,%s,%s,%s,%s,%s", author, name, date, pages, isbn, stock);
+            getUserInput(author, sizeof(author));
+        } 
+    } else exit(8);
+    fclose(fptr);
+}
+
+void readFilePasswd(unsigned short *lineCountPasswd, char ***bufferPasswd) {
+    unsigned short i = 0, size = READ_SIZE;
+    char c = 1;
+    char *tmp = NULL;
+    char *line = NULL;
+    FILE *fptr = fopen(PASSWD_FILE, "r");
+    if (fptr == NULL) {printf("Error! File %s is not found.\n", PASSWD_FILE); exit(3);}
+    while (1) {
+        size = READ_SIZE;
+        i = 0;
+        line = malloc(size * sizeof(char));
+        if (line == NULL) {
+            fclose(fptr);
+            exit(4);
+        }
+        while ((c = fgetc(fptr)) != '\n' && c != EOF) {
+            if(i >= size) {
+                size += 10;
+                tmp = realloc(line, size * sizeof(char));
+                if(tmp == NULL) {free(line); fclose(fptr); exit(5);}
+                line = tmp;
+            }
+            line[i++] = c;
+        }
+        line[i] = '\0';
+        if (i == 0) {free(line); if (c == EOF) break; continue;}
+        *bufferPasswd = realloc(*bufferPasswd, sizeof(char*) * (*lineCountPasswd + 1));
+        if (*bufferPasswd == NULL) {free(line); fclose(fptr); exit(7);}
+        (*bufferPasswd)[*lineCountPasswd] = line;
+        (*lineCountPasswd)++;
+        if(c == EOF) break;
     }
-    free(buffer);
-    free(books);
-    /*free(filename);*/
+    fclose(fptr);
+}
+
+void initializePasswd(User *users, char **bufferPasswd, unsigned short lineCountPasswd) {
+    unsigned short i = 0;
+    char *token;
+    for (i = 0; i < lineCountPasswd; i++) {
+        if (bufferPasswd[i][0] == '\0') continue;
+        token = strtok(bufferPasswd[i], ",");
+        strncpy(users[i].name, token, ARRAY_MAX - 1);
+        users[i].name[ARRAY_MAX - 1] = '\0';
+
+        token = strtok(NULL, ",");
+        strncpy(users[i].passwd, token, ARRAY_MAX - 1);
+        users[i].passwd[ARRAY_MAX - 1] = '\0';
+    }
+    for (i = 0; i < lineCountPasswd; i++) {
+        printf("%s, %s\n", users[i].name, users[i].passwd);
+    }
 }
