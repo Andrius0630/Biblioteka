@@ -7,12 +7,18 @@ This is our a group project.
 2. register a new user
 3. books should be written to user account
 4. regex search (optional)
-5. better ui using ncurses library
+5. better ui using ncurses library (optional)
+6. passwd should be encrypted (optional)
 ```
 
 ## Structure of books.txt file
 ```
 author,name,year_when_published,page_count,isbn,how_many_in_stock
+```
+
+## Structure of passwd file
+```
+username,passwd
 ```
 
 ## EVERYTHING SHOULD BE WRITTEN IN CODE USING camelCase
