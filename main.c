@@ -9,30 +9,17 @@ int main(void) {
     */
 
     
-    char **bufferPasswd = NULL;
-    unsigned short lineCountPasswd = 0, i = 0;
     
-    readFilePasswd(&lineCountPasswd, &bufferPasswd);
-    
-    User *users = malloc(lineCountPasswd * sizeof(User));
-    if (users == NULL) exit(9);
     
     /*createFileAuthor(books, lineCount);*/
-    initializePasswd(users, bufferPasswd, lineCountPasswd);
-    renderLogIn(users, lineCountPasswd);
+
+    renderLogIn();
 
 
 
 
     
-    for (i = 0; i < lineCountPasswd; i++) {
-        free(bufferPasswd[i]);
-    }
-
     
-    free(bufferPasswd);
-    
-    free(users);
     /*nufree(filenameUserData);
     free(filenamePasswd);*/
 

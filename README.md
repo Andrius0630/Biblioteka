@@ -5,7 +5,7 @@ This is our a group project.
 ```
 1. admin can remove and modify users
 2. register a new user
-3. books should be registered on user account when he takes a book
+3. DONE! books should be registered on user account when he takes a book
 4. regex search (optional)
 5. better ui using ncurses library (optional)
 6. passwd should be encrypted (optional)

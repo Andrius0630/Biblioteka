@@ -22,7 +22,7 @@ void getUserInput(char *buffer, unsigned short size) {
     }
 }
 
-void renderLogIn(User *users, unsigned short lineCountPasswd) {
+void renderLogIn() {
     char choice[ARRAY_MAX];
     while (1) {
         system("clear");
@@ -31,7 +31,7 @@ void renderLogIn(User *users, unsigned short lineCountPasswd) {
         getUserInput(choice, sizeof(choice));
         switch (choice[0]) {
             case '1':
-                loginUser(users, lineCountPasswd);
+                loginUser();
                 break;
             case '2':
                 createUser();
@@ -260,8 +260,6 @@ void takeBook(Data *usrBook, unsigned short lineCountData, Book *books, unsigned
             updateFile(books, lineCount);
             return;
         }
-        
-        
     }
 }
 
@@ -434,11 +432,17 @@ void addNewMode() {
     appendToFile(author, name, date, pages, isbn, stock);
 }
 
-void loginUser(User *users, unsigned short lineCountPasswd) {
+void loginUser() {
+    char **bufferPasswd = NULL;
     char username[ARRAY_MAX];
     char passwd[ARRAY_MAX];
-    unsigned short i = 0;
+    unsigned short i = 0, lineCountPasswd = 0;
     char found = 0, attempts = 4;
+
+    readFilePasswd(&lineCountPasswd, &bufferPasswd);
+    User *users = malloc(lineCountPasswd * sizeof(User));
+    if (users == NULL) exit(9);
+    initializePasswd(users, bufferPasswd, lineCountPasswd);
 
     while (attempts > 0)
     {
@@ -469,15 +473,65 @@ void loginUser(User *users, unsigned short lineCountPasswd) {
         }
             
     }
-    
 
-    
-    
+    for (i = 0; i < lineCountPasswd; i++) {
+        free(bufferPasswd[i]);
+    }
+    free(bufferPasswd);
+    free(users);
+
 }
 
 void createUser() {
+    char **bufferPasswd = NULL;
     char choice[ARRAY_MAX];
-    system("clear");
-    printf("User creation feature coming soon! Press Enter to return.\n");
-    getUserInput(choice, sizeof(choice));
-}
+    char name[ARRAY_MAX];
+    char passwd[ARRAY_MAX];
+    char passwd2[ARRAY_MAX];
+    char success = 0, nameExists = 0;
+
+    unsigned short lineCountPasswd = 0, i = 0;
+    readFilePasswd(&lineCountPasswd, &bufferPasswd);
+    User *users = malloc(lineCountPasswd * sizeof(User));
+    if (users == NULL) exit(9);
+    initializePasswd(users, bufferPasswd, lineCountPasswd);
+
+    while (!success) {
+        system("clear");
+        printf("Enter new name: ");
+        getUserInput(name, sizeof(name));
+        nameExists = 0;
+        for (i = 0; i < lineCountPasswd; i++) {
+            if (strcmp(users[i].name, name) == 0) {
+                printf("Username already exists! Try again.\n");
+                getUserInput(choice, sizeof(choice));
+                nameExists = 1;
+                break;
+            }
+        }
+        if (nameExists) continue;
+
+        printf("Enter new password: ");
+        getUserInput(passwd, sizeof(passwd));
+
+        printf("Confirm new password: ");
+        getUserInput(passwd2, sizeof(passwd2));
+
+        if (strcmp(passwd, passwd2) != 0) {
+            printf("Passwords do not match! Try again.\n");
+            getUserInput(choice, sizeof(choice));
+            continue;
+        }
+        appendToPasswd(name, passwd);
+
+        printf("User created successfully!\n");
+        success = 1;
+    }
+
+    for (i = 0; i < lineCountPasswd; i++) {
+        free(bufferPasswd[i]);
+    }
+    free(bufferPasswd);
+    free(users);
+}    
+    

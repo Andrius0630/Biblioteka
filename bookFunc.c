@@ -224,6 +224,15 @@ void appendToUsr(char *author, char *name, char *date, char *pages, char *isbn, 
     fclose(fptr);
 }
 
+void appendToPasswd(char *name, char *passwd) {
+    FILE *fptr = fopen(PASSWD_FILE, "a");
+    
+    if (fptr != NULL) {
+        fprintf(fptr, "%s,%s\n", name, passwd);
+    } else exit(8);
+    fclose(fptr);
+}
+
 void readFilePasswd(unsigned short *lineCountPasswd, char ***bufferPasswd) {
     unsigned short i = 0, size = READ_SIZE;
     char c = 1;
