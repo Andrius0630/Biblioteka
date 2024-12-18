@@ -21,6 +21,8 @@ typedef struct
     unsigned short id;
     char author[ARRAY_MAX];
     char name[ARRAY_MAX];
+    unsigned short date;
+    unsigned short pages;
     char isbn[ISBN_MAX];
     unsigned short stock;
 }Data;
@@ -36,19 +38,20 @@ void renderMainMenuUser(User *users, unsigned short userInUse);
 void getUserInput(char *buffer, unsigned short size);
 
 void findBook(Book *books, unsigned short lineCount);
-void takeBook(Book *books, unsigned short lineCount);
-void returnBook(Book *books, unsigned short lineCount);
+void takeBook(Data *usrBook, unsigned short lineCountData, Book *books, unsigned short lineCount, User *users, unsigned short userInUse);
+void returnBook(Data *usrBook, unsigned short lineCountData, Book *books, unsigned short lineCount, User *users, unsigned short userInUse);
 void listBooks(Book *books, unsigned short lineCount);
 
 void renderLogIn(User *users, unsigned short lineCountPasswd);
 void loginUser(User *users, unsigned short lineCountPasswd);
 void modifyMode(Book *books, unsigned short lineCount);
-void addNewMode();
+void addNewMode(User *users, unsigned short userInUse);
 void createUser();
 
 
-
-
+void readFileUsr(unsigned short *lineCountData, char ***usrBuffer, User *users, unsigned short userInUse);
+void initializeUsrData(Data *usrBook, char **usrBuffer, unsigned short lineCountData);
+void updateUsrData(Data *usrBook, unsigned short lineCountData, User *users, unsigned short userInUse);
 
 void readFile(unsigned short *lineCount, char ***buffer);
 void readFilePasswd(unsigned short *lineCountPasswd, char ***bufferPasswd);
@@ -57,4 +60,4 @@ void initializePasswd(User *users, char **bufferPasswd, unsigned short lineCount
 void initializeBooks(Book *books, char **buffer, unsigned short lineCount);
 /*void createFileAuthor(Book *books, unsigned short lineCount);*/
 void updateFile(Book *books, unsigned short lineCount);
-void appendToFile(char *author, char *name, char *date, char *pages, char *isbn, char *stock);
+void appendToFile(char *author, char *name, char *date, char *pages, char *isbn, char *stock, User *users, unsigned short userInUse, char usrMode);

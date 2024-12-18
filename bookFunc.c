@@ -76,13 +76,14 @@ void initializeBooks(Book *books, char **buffer, unsigned short lineCount) {
 
         token = strtok(NULL, ",");
         strncpy(books[i].name, token, ARRAY_MAX - 1);
-
+        books[i].name[ARRAY_MAX - 1] = '\0';
 
         books[i].date = atoi(strtok(NULL, ","));
         books[i].pages = atoi(strtok(NULL, ","));
         books[i].mentioned = 0;
         token = strtok(NULL, ",");
         strncpy(books[i].isbn, token, ISBN_MAX);
+        books[i].isbn[ARRAY_MAX - 1] = '\0';
         books[i].stock = atoi(strtok(NULL, ","));
     }
 }
@@ -103,8 +104,88 @@ void initializeBooks(Book *books, char **buffer, unsigned short lineCount) {
             } else continue;
         }
     }
-    
 }*/
+
+void readFileUsr(unsigned short *lineCountData, char ***usrBuffer, User *users, unsigned short userInUse) {
+    char filename[ARRAY_MAX];
+    strcpy(filename, "userFiles/");
+    strcat(filename, users[userInUse].name);
+    unsigned short i = 0, size = READ_SIZE;
+    char c = 1;
+    char *tmp = NULL;
+    char *line = NULL;
+    FILE *fptr = fopen(filename, "r");
+    if (fptr == NULL) {
+        /*printf("Error! File %s is not found.\n", filename);*/
+        FILE *fptr2 = fopen(filename, "w");
+        fclose(fptr2);
+        fptr = fopen(filename, "r");
+    }
+    while (1) {
+        size = READ_SIZE;
+        i = 0;
+        line = malloc(size * sizeof(char));
+        if (line == NULL) {
+            fclose(fptr);
+            exit(4);
+        }
+        while ((c = fgetc(fptr)) != '\n' && c != EOF) {
+            if(i >= size) {
+                size += 10;
+                tmp = realloc(line, size * sizeof(char));
+                if(tmp == NULL) {free(line); fclose(fptr); exit(5);}
+                line = tmp;
+            }
+            line[i++] = c;
+        }
+        line[i] = '\0';
+        if (i == 0) {free(line); if (c == EOF) break; continue;}
+        *usrBuffer = realloc(*usrBuffer, sizeof(char*) * (*lineCountData + 1));
+        if (*usrBuffer == NULL) {free(line); fclose(fptr); exit(7);}
+        (*usrBuffer)[*lineCountData] = line;
+        (*lineCountData)++;
+        if(c == EOF) break;
+    }
+    fclose(fptr);
+}
+
+void initializeUsrData(Data *usrBook, char **usrBuffer, unsigned short lineCountData) {
+    unsigned short i = 0;
+    char *token;
+    for (i = 0; i < lineCountData; i++) {
+        if (usrBuffer[i][0] == '\0') continue;
+        usrBook[i].id = i+1;
+        token = strtok(usrBuffer[i], ",");
+        strncpy(usrBook[i].author, token, ARRAY_MAX - 1);
+        usrBook[i].author[ARRAY_MAX - 1] = '\0';
+
+
+        token = strtok(NULL, ",");
+        strncpy(usrBook[i].name, token, ARRAY_MAX - 1);
+        usrBook[i].name[ARRAY_MAX - 1] = '\0';
+
+        usrBook[i].date = atoi(strtok(NULL, ","));
+        usrBook[i].pages = atoi(strtok(NULL, ","));
+        token = strtok(NULL, ",");
+        strncpy(usrBook[i].isbn, token, ISBN_MAX);
+        usrBook[i].isbn[ARRAY_MAX - 1] = '\0';
+        usrBook[i].stock = atoi(strtok(NULL, ","));
+    }
+}
+
+void updateUsrData(Data *usrBook, unsigned short lineCountData, User *users, unsigned short userInUse) {
+    char filename[ARRAY_MAX];
+    strcpy(filename, "userFiles/");
+    strcat(filename, users[userInUse].name);
+    unsigned short i = 0;
+    FILE *fptr = fopen(filename, "w");
+    if (fptr != NULL) {
+        for (i = 0; i < lineCountData; i++) {
+            if (usrBook[i].stock > 0) fprintf(fptr, "%s,%s,%d,%d,%s,%d\n", usrBook[i].author, usrBook[i].name, usrBook[i].date, usrBook[i].pages, usrBook[i].isbn, usrBook[i].stock);
+        }    
+        fclose(fptr);
+    } else exit(8);
+}
 
 void updateFile(Book *books, unsigned short lineCount) {
     unsigned short i = 0;
@@ -117,12 +198,18 @@ void updateFile(Book *books, unsigned short lineCount) {
     fclose(fptr);
 }
 
-void appendToFile(char *author, char *name, char *date, char *pages, char *isbn, char *stock) {
-    FILE *fptr = fopen(BOOKS_FILE, "a");
+void appendToFile(char *author, char *name, char *date, char *pages, char *isbn, char *stock, User *users, unsigned short userInUse, char usrMode) {
+    char filename[ARRAY_MAX];
+    FILE *fptr = NULL;
+    strcpy(filename, "userFiles/");
+    strcat(filename, users[userInUse].name);
+    if (usrMode == '1') fptr = fopen(filename, "a");
+    else fptr = fopen(BOOKS_FILE, "a");
+    
+    
     if (fptr != NULL) {
         if (atoi(stock) > 0) {
             fprintf(fptr, "\n%s,%s,%s,%s,%s,%s", author, name, date, pages, isbn, stock);
-            getUserInput(author, sizeof(author));
         } 
     } else exit(8);
     fclose(fptr);
