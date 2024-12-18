@@ -132,7 +132,7 @@ void renderMainMenuAdmin(User *users, unsigned short userInUse) {
                 modifyMode(books, lineCount);
                 break;
             case '3':
-                addNewMode(users, userInUse);
+                addNewMode();
                 break;
             case '0':
                 return;
@@ -211,9 +211,58 @@ void findBook(Book *books, unsigned short lineCount) {
 
 void takeBook(Data *usrBook, unsigned short lineCountData, Book *books, unsigned short lineCount, User *users, unsigned short userInUse) {
     char choice[ARRAY_MAX];
+    char pages[ARRAY_MAX];
+    char date[ARRAY_MAX];
+    char found = 0;
+    unsigned short i = 0, id = 0, j = 0;
     system("clear");
-    printf("Book borrowing coming soon! Press Enter to return.\n");
+    printf("Your books:\n");
+    for (i = 0; i < lineCount; i++) {
+        if (books[i].stock > 0) printf("ID: %d. AUTHOR: %s, NAME: %s, ISBN: %s, IN STOCK: %d\n",  books[i].id, books[i].author, books[i].name, books[i].isbn, books[i].stock);
+        else continue;
+    }
+    if (!i)
+    {
+        printf("\nThere is no books to take!\n\nPress Enter to return...\n");
+        getUserInput(choice, sizeof(choice));
+        return;
+    }
+    
+
+    printf("\n\nEnter book's ID or 0 to finish: ");
     getUserInput(choice, sizeof(choice));
+    id = atoi(choice);
+    if (atoi(choice) == 0) return;
+    else {
+        for (i = 0; i < lineCount; i++) {
+            for (j = 0; j < lineCountData; j++) {
+                if (strcmp(books[i].name, usrBook[j].name) == 0 && books[i].id == id && books[i].stock > 0) {
+                    printf("You have chosen book with ID and took it: %s. Press Enter to continue...\n", usrBook[j].name);
+                    getUserInput(choice, sizeof(choice));
+                    found = 1;
+                    books[i].stock--;
+                    usrBook[j].stock++;
+                    updateFile(books, lineCount);
+                    updateUsrData(usrBook, lineCountData, users, userInUse);
+                    return;
+                }
+                
+            }
+        }
+        if (!found && books[id-1].stock > 0)
+        {
+            printf("You have chosen book with ID and took it: %d. Press Enter to continue...\n", id);
+            getUserInput(choice, sizeof(choice));
+            books[id-1].stock--;
+            sprintf(pages, "%d", books[id-1].pages);
+            sprintf(date, "%d", books[id-1].date);
+            appendToUsr(books[id-1].author, books[id-1].name, date, pages, books[id-1].isbn, "1", users, userInUse);
+            updateFile(books, lineCount);
+            return;
+        }
+        
+        
+    }
 }
 
 void returnBook(Data *usrBook, unsigned short lineCountData, Book *books, unsigned short lineCount, User *users, unsigned short userInUse) {
@@ -222,7 +271,6 @@ void returnBook(Data *usrBook, unsigned short lineCountData, Book *books, unsign
     char date[ARRAY_MAX];
     char found = 0;
     unsigned short i = 0, id = 0, j = 0;
-    found = 0;
     system("clear");
     printf("Your books:\n");
     for (i = 0; i < lineCountData; i++) {
@@ -240,9 +288,7 @@ void returnBook(Data *usrBook, unsigned short lineCountData, Book *books, unsign
     printf("\n\nEnter book's ID or 0 to finish: ");
     getUserInput(choice, sizeof(choice));
     id = atoi(choice);
-    if (atoi(choice) == 0) {
-        return;
-    }
+    if (atoi(choice) == 0) return;
     else {
         for (i = 0; i < lineCountData; i++) {
             for (j = 0; j < lineCount; j++) {
@@ -264,7 +310,7 @@ void returnBook(Data *usrBook, unsigned short lineCountData, Book *books, unsign
             usrBook[id-1].stock--;
             sprintf(pages, "%d", usrBook[id-1].pages);
             sprintf(date, "%d", usrBook[id-1].date);
-            appendToFile(usrBook[id-1].author, usrBook[id-1].name, date, pages, usrBook[id-1].isbn, "1", users, userInUse, '0');
+            appendToFile(usrBook[id-1].author, usrBook[id-1].name, date, pages, usrBook[id-1].isbn, "1");
             updateUsrData(usrBook, lineCountData, users, userInUse);
         }
         
@@ -355,7 +401,7 @@ void modifyMode(Book *books, unsigned short lineCount) {
     }
 }
 
-void addNewMode(User *users, unsigned short userInUse) {
+void addNewMode() {
     char author[ARRAY_MAX];
     char name[ARRAY_MAX];
     char date[ARRAY_MAX];
@@ -385,7 +431,7 @@ void addNewMode(User *users, unsigned short userInUse) {
     printf("\nSuccess!. Press Enter to continue...");
     getUserInput(choice, sizeof(choice));
 
-    appendToFile(author, name, date, pages, isbn, stock, users, userInUse, '0');
+    appendToFile(author, name, date, pages, isbn, stock);
 }
 
 void loginUser(User *users, unsigned short lineCountPasswd) {

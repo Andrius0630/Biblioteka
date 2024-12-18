@@ -45,7 +45,7 @@ void listBooks(Book *books, unsigned short lineCount);
 void renderLogIn(User *users, unsigned short lineCountPasswd);
 void loginUser(User *users, unsigned short lineCountPasswd);
 void modifyMode(Book *books, unsigned short lineCount);
-void addNewMode(User *users, unsigned short userInUse);
+void addNewMode();
 void createUser();
 
 
@@ -60,4 +60,5 @@ void initializePasswd(User *users, char **bufferPasswd, unsigned short lineCount
 void initializeBooks(Book *books, char **buffer, unsigned short lineCount);
 /*void createFileAuthor(Book *books, unsigned short lineCount);*/
 void updateFile(Book *books, unsigned short lineCount);
-void appendToFile(char *author, char *name, char *date, char *pages, char *isbn, char *stock, User *users, unsigned short userInUse, char usrMode);
+void appendToFile(char *author, char *name, char *date, char *pages, char *isbn, char *stock);
+void appendToUsr(char *author, char *name, char *date, char *pages, char *isbn, char *stock, User *users, unsigned short userInUse);

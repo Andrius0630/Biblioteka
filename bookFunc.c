@@ -198,13 +198,22 @@ void updateFile(Book *books, unsigned short lineCount) {
     fclose(fptr);
 }
 
-void appendToFile(char *author, char *name, char *date, char *pages, char *isbn, char *stock, User *users, unsigned short userInUse, char usrMode) {
+void appendToFile(char *author, char *name, char *date, char *pages, char *isbn, char *stock) {
+    FILE *fptr = fopen(BOOKS_FILE, "a");
+    
+    if (fptr != NULL) {
+        if (atoi(stock) > 0) {
+            fprintf(fptr, "\n%s,%s,%s,%s,%s,%s", author, name, date, pages, isbn, stock);
+        } 
+    } else exit(8);
+    fclose(fptr);
+}
+
+void appendToUsr(char *author, char *name, char *date, char *pages, char *isbn, char *stock, User *users, unsigned short userInUse) {
     char filename[ARRAY_MAX];
-    FILE *fptr = NULL;
     strcpy(filename, "userFiles/");
     strcat(filename, users[userInUse].name);
-    if (usrMode == '1') fptr = fopen(filename, "a");
-    else fptr = fopen(BOOKS_FILE, "a");
+    FILE *fptr = fopen(filename, "a");
     
     
     if (fptr != NULL) {
