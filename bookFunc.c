@@ -198,6 +198,17 @@ void updateFile(Book *books, unsigned short lineCount) {
     fclose(fptr);
 }
 
+void updateFileUser(User *users, unsigned short lineCountPasswd) {
+    unsigned short i = 0;
+    FILE *fptr = fopen(PASSWD_FILE, "w");
+    if (fptr != NULL) {
+        for (i = 0; i < lineCountPasswd; i++) {
+            if (users[i].deleted != 1) fprintf(fptr, "%s,%s\n", users[i].name, users[i].passwd);
+        }
+    } else exit(8);
+    fclose(fptr);
+}
+
 void appendToFile(char *author, char *name, char *date, char *pages, char *isbn, char *stock) {
     FILE *fptr = fopen(BOOKS_FILE, "a");
     
@@ -280,8 +291,6 @@ void initializePasswd(User *users, char **bufferPasswd, unsigned short lineCount
         token = strtok(NULL, ",");
         strncpy(users[i].passwd, token, ARRAY_MAX - 1);
         users[i].passwd[ARRAY_MAX - 1] = '\0';
-    }
-    for (i = 0; i < lineCountPasswd; i++) {
-        printf("%s, %s\n", users[i].name, users[i].passwd);
+        users[i].deleted = 0;
     }
 }

@@ -31,10 +31,11 @@ typedef struct
 {
     char name[ARRAY_MAX];
     char passwd[ARRAY_MAX];
+    char deleted;
 }User;
 
 void renderMainMenuAdmin(User *users, unsigned short userInUse);
-void renderMainMenuUser(User *users, unsigned short userInUse);
+void renderMainMenuUser(User *users, unsigned short lineCountPasswd, unsigned short userInUse);
 void getUserInput(char *buffer, unsigned short size);
 
 void findBook(Book *books, unsigned short lineCount);
@@ -63,3 +64,5 @@ void updateFile(Book *books, unsigned short lineCount);
 void appendToFile(char *author, char *name, char *date, char *pages, char *isbn, char *stock);
 void appendToUsr(char *author, char *name, char *date, char *pages, char *isbn, char *stock, User *users, unsigned short userInUse);
 void appendToPasswd(char *name, char *passwd);
+void modifyUsrMode(User *users, unsigned short lineCountPasswd, unsigned short userInUse);
+void updateFileUser(User *users, unsigned short lineCountPasswd);

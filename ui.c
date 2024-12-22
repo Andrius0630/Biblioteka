@@ -48,7 +48,7 @@ void renderLogIn() {
     }
 }
 
-void renderMainMenuUser(User *users, unsigned short userInUse) {
+void renderMainMenuUser(User *users, unsigned short lineCountPasswd, unsigned short userInUse) {
     unsigned short lineCount, lineCountData, i;
     char choice[ARRAY_MAX];
     while (1) {
@@ -71,7 +71,7 @@ void renderMainMenuUser(User *users, unsigned short userInUse) {
         initializeUsrData(usrBook, usrBookBuffer, lineCountData);
 
         system("clear");
-        printf("Biblioteka\n\nWelcome back, %s\n\n1.Find book\n2.Take book\n3.Return book\n4.List all books available\n\n\n0.Logout\n\n\n", users[userInUse].name);
+        printf("Biblioteka\n\nWelcome back, %s\n\n1.Find book\n2.Take book\n3.Return book\n4.List all books available\n\n\n5.Modify account or delete\n0.Logout\n\n\n", users[userInUse].name);
         printf("Choose an option: ");
         getUserInput(choice, sizeof(choice));
         switch (choice[0]) {
@@ -87,7 +87,32 @@ void renderMainMenuUser(User *users, unsigned short userInUse) {
             case '4':
                 listBooks(books, lineCount);
                 break;
+            case '5':
+                modifyUsrMode(users, lineCountPasswd, userInUse);
+                for (i = 0; i < lineCount; i++) {
+                    free(buffer[i]);
+                }
+                free(buffer);
+                free(books);
+
+                for (i = 0; i < lineCountData; i++) {
+                    free(usrBookBuffer[i]);
+                }
+                free(usrBookBuffer);
+                free(usrBook);
+                return;
             case '0':
+                for (i = 0; i < lineCount; i++) {
+                    free(buffer[i]);
+                }
+                free(buffer);
+                free(books);
+
+                for (i = 0; i < lineCountData; i++) {
+                    free(usrBookBuffer[i]);
+                }
+                free(usrBookBuffer);
+                free(usrBook);
                 return;
             default:
                 printf("Wrong input! Press Enter to try again.\n");
@@ -460,7 +485,7 @@ void loginUser() {
             }
             if (strcmp(users[i].name, username) == 0 && strcmp(users[i].passwd, passwd) == 0 && strcmp(users[i].name, "admin") != 0) {
                 found = 1;
-                renderMainMenuUser(users, i);
+                renderMainMenuUser(users, lineCountPasswd, i);
                 return;
             }
         }
@@ -535,3 +560,48 @@ void createUser() {
     free(users);
 }    
     
+void modifyUsrMode(User *users, unsigned short lineCountPasswd, unsigned short userInUse) {
+    char choice[ARRAY_MAX];
+    while (1)
+    {
+        system("clear");
+        printf("1. CURRENT NAME: %s, 2. CURRENT PASSWORD: %s 3. DELETE USER\n",  users[userInUse].name, users[userInUse].passwd);
+        printf("Enter what you want to do or 0 to finish: ");
+        getUserInput(choice, sizeof(choice));
+        switch (choice[0]) {
+            case '0':
+                return;
+            case '1':
+                printf("Enter new name: ");
+                getUserInput(choice, sizeof(choice));
+                strcpy(users[userInUse].name, choice);
+                updateFileUser(users, lineCountPasswd);
+                printf("Changes saved! Press Enter to continue...\n");
+                getUserInput(choice, sizeof(choice));
+                break;
+            case '2':
+                printf("Enter new password: ");
+                getUserInput(choice, sizeof(choice));
+                strcpy(users[userInUse].passwd, choice);
+                updateFileUser(users, lineCountPasswd);
+                printf("Changes saved! Press Enter to continue...\n");
+                getUserInput(choice, sizeof(choice));
+                break;
+            case '3':
+                printf("Are you really want to delete user? (y/n): ");
+                getUserInput(choice, sizeof(choice));
+                if (choice[0]=='y')
+                {
+                    users[userInUse].deleted = 1;
+                    updateFileUser(users, lineCountPasswd);
+                    printf("Changes saved! Press Enter to logout...\n");
+                    getUserInput(choice, sizeof(choice));
+                    return;
+                } else break;
+            default:
+                printf("Wrong input! Press Enter to try again.\n");
+                getUserInput(choice, sizeof(choice));
+                break;
+        }
+    }
+}

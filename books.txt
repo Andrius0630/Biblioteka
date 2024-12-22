@@ -1,8 +1,8 @@
-Haruki Murakami,Norwegian Wood,1987,296,9780375704024,6
+Haruki Murakami,Norwegian Wood,1987,296,9780375704024,5
 George Orwell,1984,1949,328,9780451524935,1
-Haruki Murakami,Kafka on the Shore,2002,505,9781400079278,7
+Haruki Murakami,Kafka on the Shore,2002,505,9781400079278,9
 George Orwell,Animal Farm,1945,112,9780451526342,2
 Jane Austen,Pride and Prejudice,1813,432,9781503290563,2
 Gabriel Garcia Marquez,One Hundred Years of Solitude,1967,417,9780060883287,7
-Jane Austen,Sense and Sensibility,1811,409,9781503219731,5
+Jane Austen,Sense and Sensibility,1811,409,9781503219731,10
 Gabriel Garcia Marquez,Love in the Time of Cholera,1985,368,9780307389732,1

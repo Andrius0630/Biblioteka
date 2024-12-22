@@ -1,6 +1,9 @@
 # Biblioteka
 This is our a group project.
 
+## IMPORTANT
+If you want to delete a book, you have to change the number of books in stock to zero
+
 ## TODO
 ```
 1. admin can remove and modify users
