@@ -562,8 +562,12 @@ void createUser() {
     
 void modifyUsrMode(User *users, unsigned short lineCountPasswd, unsigned short userInUse) {
     char choice[ARRAY_MAX];
+    char passwd[ARRAY_MAX];
+    unsigned short i = 0;
+    char nameExists = 0;
     while (1)
     {
+        nameExists = 0;
         system("clear");
         printf("1. CURRENT NAME: %s, 2. CURRENT PASSWORD: %s 3. DELETE USER\n",  users[userInUse].name, users[userInUse].passwd);
         printf("Enter what you want to do or 0 to finish: ");
@@ -574,19 +578,40 @@ void modifyUsrMode(User *users, unsigned short lineCountPasswd, unsigned short u
             case '1':
                 printf("Enter new name: ");
                 getUserInput(choice, sizeof(choice));
-                strcpy(users[userInUse].name, choice);
-                updateFileUser(users, lineCountPasswd);
-                printf("Changes saved! Press Enter to continue...\n");
-                getUserInput(choice, sizeof(choice));
-                break;
+                for (i = 0; i < lineCountPasswd; i++) {
+                    if (strcmp(users[i].name, choice) == 0) {
+                        printf("Username already exists! Try again.\n");
+                        getUserInput(choice, sizeof(choice));
+                        nameExists = 1;
+                        break;
+                    }
+                }
+                if (nameExists == 1) break;
+                else {
+                    strcpy(users[userInUse].name, choice);
+                    updateFileUser(users, lineCountPasswd);
+                    printf("Changes saved! Press Enter to continue...\n");
+                    getUserInput(choice, sizeof(choice));
+                    break;
+                }
             case '2':
                 printf("Enter new password: ");
                 getUserInput(choice, sizeof(choice));
-                strcpy(users[userInUse].passwd, choice);
-                updateFileUser(users, lineCountPasswd);
-                printf("Changes saved! Press Enter to continue...\n");
-                getUserInput(choice, sizeof(choice));
-                break;
+
+                printf("Confirm new password: ");
+                getUserInput(passwd, sizeof(passwd));
+
+                if (strcmp(passwd, choice) != 0) {
+                    printf("Passwords do not match! Try again.\n");
+                    getUserInput(choice, sizeof(choice));
+                    break;
+                } else {
+                    strcpy(users[userInUse].passwd, choice);
+                    updateFileUser(users, lineCountPasswd);
+                    printf("Changes saved! Press Enter to continue...\n");
+                    getUserInput(choice, sizeof(choice));
+                    break;
+                }
             case '3':
                 printf("Are you really want to delete user? (y/n): ");
                 getUserInput(choice, sizeof(choice));
