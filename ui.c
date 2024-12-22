@@ -622,7 +622,11 @@ void modifyUsrMode(User *users, unsigned short lineCountPasswd, unsigned short u
                     printf("Changes saved! Press Enter to logout...\n");
                     getUserInput(choice, sizeof(choice));
                     return;
-                } else break;
+                } else {
+                    printf("Deletion canceled! Press Enter to continue...\n");
+                    getUserInput(choice, sizeof(choice));
+                    break;
+                }
             default:
                 printf("Wrong input! Press Enter to try again.\n");
                 getUserInput(choice, sizeof(choice));
