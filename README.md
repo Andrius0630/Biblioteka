@@ -6,12 +6,12 @@ If you want to delete a book, you have to change the number of books in stock to
 
 ## TODO
 ```
-1. admin can remove and modify users
-2. register a new user
+1. DONE! admin can remove and modify users
+2. DONE! register a new user
 3. DONE! books should be registered on user account when he takes a book
 4. regex search (optional)
-5. better ui using ncurses library (optional)
-6. passwd should be encrypted (optional)
+5. better ui using ncurses library
+6. passwd should be encrypted
 ```
 
 ## Structure of books.txt file
