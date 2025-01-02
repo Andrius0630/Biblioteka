@@ -1,5 +1,6 @@
 # Biblioteka
 This is our a group project.
+Linux only! (for now)
 
 ## IMPORTANT
 If you want to delete a book, you have to change the number of books in stock to zero
@@ -22,6 +23,11 @@ author,name,year_when_published,page_count,isbn,how_many_in_stock
 ## Structure of passwd file
 ```
 username,passwd
+```
+
+## Structure of user files
+```
+author,name,year_when_published,page_count,isbn,how_many_in_stock
 ```
 
 ## EVERYTHING SHOULD BE WRITTEN IN CODE USING camelCase
