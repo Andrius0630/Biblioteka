@@ -48,6 +48,7 @@ void loginUser();
 void modifyMode(Book *books, unsigned short lineCount);
 void addNewMode();
 void createUser();
+void drawLogo();
 
 
 void readFileUsr(unsigned short *lineCountData, char ***usrBuffer, User *users, unsigned short userInUse);
