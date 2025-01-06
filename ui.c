@@ -55,6 +55,7 @@ void renderMainMenuUser(User *users, unsigned short lineCountPasswd, unsigned sh
         char **buffer = NULL;
         char **usrBookBuffer = NULL;
 
+        decrypt(users[userInUse].name, 0xFACE);
 
         readFile(&lineCount, &buffer);
         readFileUsr(&lineCountData, &usrBookBuffer, users, userInUse);
@@ -71,6 +72,8 @@ void renderMainMenuUser(User *users, unsigned short lineCountPasswd, unsigned sh
         drawLogo();
         printf("\t\t\t\t     Welcome, %s\n\n1. Find a book\n2. Take a book\n3. Return a book\n4. View all available books\n\n\n5. Manage account\n0. Logout\n\n\n", users[userInUse].name);
         printf("Select an option: ");
+        encrypt(users[userInUse].name, 0xFACE);
+
         getUserInput(choice, sizeof(choice));
         switch (choice[0]) {
             case '1':
@@ -759,17 +762,16 @@ void loginUser() {
         encrypt(username, 0xFACE);
         getUserInput(passwd, sizeof(passwd));
         encrypt(passwd, 0xFACE);
+
         for (i = 0; i < lineCountPasswd; i++) {
             if (strcmp(users[i].name, username) == 0 && strcmp(users[i].passwd, passwd) == 0 && strcmp(users[i].name, encryptedAdmin) == 0) {
                 found = 1;
                 decrypt(users[i].name, 0xFACE);
                 renderMainMenuAdmin(users, i);
-                encrypt(users[i].name, 0xFACE);
                 return;
             }
             if (strcmp(users[i].name, username) == 0 && strcmp(users[i].passwd, passwd) == 0 && strcmp(users[i].name, encryptedAdmin) != 0) {
                 found = 1;
-                decrypt(users[i].name, 0xFACE);
                 renderMainMenuUser(users, lineCountPasswd, i);
                 encrypt(users[i].name, 0xFACE);
                 return;
@@ -781,9 +783,8 @@ void loginUser() {
             system("clear");
             drawLogo();
             printf("\t\t\t\t\t   Login\n");
-            printf("\n\n\n\t    Invalid username or password, please try again. %d attempts remaining. \n", attempts);
-            sleep(1);
-            
+            printf("\n\n\n\t    Invalid username or password, please try again. %d attempts remaining.\n\t\t\t\tPress ENTER to try again\n", attempts);
+            getc(stdin);
         }
             
     }
@@ -875,7 +876,10 @@ void modifyUsrMode(User *users, unsigned short lineCountPasswd, unsigned short u
         system("clear");
         drawLogo();
         printf("\t\t\t\t   Account management\n\n\n");
+        decrypt(users[userInUse].name, 0xFACE);
         printf("Currently logged in as: %s\n\n", users[userInUse].name);
+        encrypt(users[userInUse].name, 0xFACE);
+
         printf("1. Change username\n2. Change password\n3. Delete account\n");
         printf("\n\n\nSelect an option (0 to exit): ");
         getUserInput(choice, sizeof(choice));
@@ -920,6 +924,9 @@ void modifyUsrMode(User *users, unsigned short lineCountPasswd, unsigned short u
 
                 printf("\t\t\t\t  Confirm new password: ");
                 getUserInput(passwd, sizeof(passwd));
+                encrypt(choice, 0xFACE);
+                encrypt(passwd, 0xFACE);
+
 
                 if (strcmp(passwd, choice) != 0) {
                     system("clear");
@@ -928,7 +935,6 @@ void modifyUsrMode(User *users, unsigned short lineCountPasswd, unsigned short u
                     sleep(3);
                     break;
                 } else {
-                    encrypt(choice, 0xFACE);
                     strcpy(users[userInUse].passwd, choice);
                     updateFileUser(users, lineCountPasswd);
                     system("clear");
