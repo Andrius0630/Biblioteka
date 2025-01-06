@@ -55,6 +55,7 @@ void renderMainMenuUser(User *users, unsigned short lineCountPasswd, unsigned sh
         char **buffer = NULL;
         char **usrBookBuffer = NULL;
 
+
         readFile(&lineCount, &buffer);
         readFileUsr(&lineCountData, &usrBookBuffer, users, userInUse);
 
@@ -66,7 +67,6 @@ void renderMainMenuUser(User *users, unsigned short lineCountPasswd, unsigned sh
 
         initializeBooks(books, buffer, lineCount);
         initializeUsrData(usrBook, usrBookBuffer, lineCountData);
-
         system("clear");
         drawLogo();
         printf("\t\t\t\t     Welcome, %s\n\n1. Find a book\n2. Take a book\n3. Return a book\n4. View all available books\n\n\n5. Manage account\n0. Logout\n\n\n", users[userInUse].name);
@@ -747,6 +747,8 @@ void loginUser() {
 
     while (attempts > 0)
     {
+        char encryptedAdmin[] = "admin";
+        encrypt(encryptedAdmin, 0xFACE);
         system("clear");
         drawLogo();
         printf("\t\t\t\t\t   Login\n");
@@ -754,17 +756,22 @@ void loginUser() {
         printf("\n\n\t\t\t\t   Name: ");
         getUserInput(username, sizeof(username));
         printf("\t\t\t\t   Password: ");
+        encrypt(username, 0xFACE);
         getUserInput(passwd, sizeof(passwd));
         encrypt(passwd, 0xFACE);
         for (i = 0; i < lineCountPasswd; i++) {
-            if (strcmp(users[i].name, username) == 0 && strcmp(users[i].passwd, passwd) == 0 && strcmp(users[i].name, "admin") == 0) {
+            if (strcmp(users[i].name, username) == 0 && strcmp(users[i].passwd, passwd) == 0 && strcmp(users[i].name, encryptedAdmin) == 0) {
                 found = 1;
+                decrypt(users[i].name, 0xFACE);
                 renderMainMenuAdmin(users, i);
+                encrypt(users[i].name, 0xFACE);
                 return;
             }
-            if (strcmp(users[i].name, username) == 0 && strcmp(users[i].passwd, passwd) == 0 && strcmp(users[i].name, "admin") != 0) {
+            if (strcmp(users[i].name, username) == 0 && strcmp(users[i].passwd, passwd) == 0 && strcmp(users[i].name, encryptedAdmin) != 0) {
                 found = 1;
+                decrypt(users[i].name, 0xFACE);
                 renderMainMenuUser(users, lineCountPasswd, i);
+                encrypt(users[i].name, 0xFACE);
                 return;
             }
         }
@@ -809,6 +816,7 @@ void createUser() {
         printf("\t\t\t\t\t Register\n");
         printf("\n\n\t\t\t\t   Username: ");
         getUserInput(name, sizeof(name));
+        encrypt(name, 0xFACE);
         nameExists = 0;
         for (i = 0; i < lineCountPasswd; i++) {
             if (strcmp(users[i].name, name) == 0) {
@@ -880,6 +888,7 @@ void modifyUsrMode(User *users, unsigned short lineCountPasswd, unsigned short u
                 printf("\t\t\t\t   Account management\n\n");
                 printf("\n\n\t\t\t\t  Enter new username: ");
                 getUserInput(choice, sizeof(choice));
+                encrypt(choice, 0xFACE);
                 for (i = 0; i < lineCountPasswd; i++) {
                     if (strcmp(users[i].name, choice) == 0) {
                         system("clear");
@@ -919,6 +928,7 @@ void modifyUsrMode(User *users, unsigned short lineCountPasswd, unsigned short u
                     sleep(3);
                     break;
                 } else {
+                    encrypt(choice, 0xFACE);
                     strcpy(users[userInUse].passwd, choice);
                     updateFileUser(users, lineCountPasswd);
                     system("clear");

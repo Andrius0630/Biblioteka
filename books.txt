@@ -1,4 +1,4 @@
-Haruki Murakami,Norwegian Wood,1987,296,9780375704024,4
+Haruki Murakami,Norwegian Wood,1987,296,9780375704024,3
 George Orwell,1984,1949,328,9780451524935,1
 Haruki Murakami,Kafka on the Shore,2002,505,9781400079278,8
 George Orwell,Animal Farm,1945,112,9780451526342,2

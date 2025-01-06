@@ -301,3 +301,9 @@ void encrypt(char password[], int key) {
         password[i] -= key;
     }
 }
+void decrypt(char password[], int key) {
+    int i = 0;
+    for (i = 0; i < strlen(password); i++) {
+        password[i] += key;
+    }
+}
