@@ -191,49 +191,49 @@ void listBooks(Book *books, unsigned short lineCount) {
     printf("PAGE %d\n\n", pageCount);
     while (j <= lineCount) {
         for (i = j; i < j + 3; i++) {
-            if (books[i].stock > 0) {
+            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0) {
                 printf("|----------------------------------------| ");
             } 
         }
         printf("\n");
         for (i = j; i < j + 3; i++) {
-            if (books[i].stock > 0) {
+            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0) {
                 printf("| ID: %-35d| ", books[i].id);
             } 
         }
         printf("\n");
         for (i = j; i < j + 3; i++) {
-            if (books[i].stock > 0) {
+            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0) {
                 printf("|----------------------------------------| ");
             } 
         }
         printf("\n");
         for (i = j; i < j + 3; i++) {
-            if (books[i].stock > 0) printf("| %-39s| ", books[i].author);
+            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0) printf("| %-39s| ", books[i].author);
         }
         printf("\n");
         for (i = j; i < j + 3; i++) {
-            if (books[i].stock > 0) printf("| %-39s| ", books[i].name);
+            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0) printf("| %-39s| ", books[i].name);
         }
         printf("\n");
         for (i = j; i < j + 3; i++) {
-            if (books[i].stock > 0) printf("| Published: %-28d| ", books[i].date);
+            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0) printf("| Published: %-28d| ", books[i].date);
         }
         printf("\n");
         for (i = j; i < j + 3; i++) {
-            if (books[i].stock > 0) printf("| Pages: %-32d| ", books[i].pages);
+            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0) printf("| Pages: %-32d| ", books[i].pages);
         }
         printf("\n");
         for (i = j; i < j + 3; i++) {
-            if (books[i].stock > 0) printf("| ISBN: %-33s| ", books[i].isbn);
+            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0) printf("| ISBN: %-33s| ", books[i].isbn);
         }
         printf("\n");
         for (i = j; i < j + 3; i++) {
-            if (books[i].stock > 0) printf("| Remaining in stock: %-19d| ", books[i].stock);
+            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0) printf("| Remaining in stock: %-19d| ", books[i].stock);
         }
         printf("\n");
         for (i = j; i < j + 3; i++) {
-            if (books[i].stock > 0) {
+            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0) {
                 printf("|----------------------------------------| ");
             } 
         }
@@ -403,49 +403,49 @@ void takeBook(Data *usrBook, unsigned short lineCountData, Book *books, unsigned
     printf("Books available to take:\n\n");
     while (j <= lineCount) {
         for (i = j; i < j + 3; i++) {
-            if (books[i].stock > 0) {
+            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0 && books[i].id > 0) {
                 printf("|----------------------------------------| ");
             } 
         }
         printf("\n");
         for (i = j; i < j + 3; i++) {
-            if (books[i].stock > 0) {
+            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0) {
                 printf("| ID: %-35d| ", books[i].id);
             } 
         }
         printf("\n");
         for (i = j; i < j + 3; i++) {
-            if (books[i].stock > 0) {
+            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0) {
                 printf("|----------------------------------------| ");
             } 
         }
         printf("\n");
         for (i = j; i < j + 3; i++) {
-            if (books[i].stock > 0) printf("| %-39s| ", books[i].author);
+            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0) printf("| %-39s| ", books[i].author);
         }
         printf("\n");
         for (i = j; i < j + 3; i++) {
-            if (books[i].stock > 0) printf("| %-39s| ", books[i].name);
+            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0) printf("| %-39s| ", books[i].name);
         }
         printf("\n");
         for (i = j; i < j + 3; i++) {
-            if (books[i].stock > 0) printf("| Published: %-28d| ", books[i].date);
+            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0) printf("| Published: %-28d| ", books[i].date);
         }
         printf("\n");
         for (i = j; i < j + 3; i++) {
-            if (books[i].stock > 0) printf("| Pages: %-32d| ", books[i].pages);
+            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0) printf("| Pages: %-32d| ", books[i].pages);
         }
         printf("\n");
         for (i = j; i < j + 3; i++) {
-            if (books[i].stock > 0) printf("| ISBN: %-33s| ", books[i].isbn);
+            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0) printf("| ISBN: %-33s| ", books[i].isbn);
         }
         printf("\n");
         for (i = j; i < j + 3; i++) {
-            if (books[i].stock > 0) printf("| Remaining in stock: %-19d| ", books[i].stock);
+            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0) printf("| Remaining in stock: %-19d| ", books[i].stock);
         }
         printf("\n");
         for (i = j; i < j + 3; i++) {
-            if (books[i].stock > 0) {
+            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0) {
                 printf("|----------------------------------------| ");
             } 
         }
@@ -524,48 +524,48 @@ void returnBook(Data *usrBook, unsigned short lineCountData, Book *books, unsign
     } else {
         while (j < lineCountData) {
             for (i = j; i < j + 3; i++) {            
-                if (usrBook[i].stock > 0) printf("|----------------------------------------| ");
+                if (usrBook[i].stock > 0 && usrBook[i].pages > 0 && usrBook[i].date > 0 && usrBook[i].id > 0) printf("|----------------------------------------| ");
 
             }
             printf("\n");
             for (i = j; i < j + 3; i++) {            
-                if (usrBook[i].stock > 0) printf("| ID: %-35d| ", usrBook[i].id);
+                if (usrBook[i].stock > 0 && usrBook[i].pages > 0 && usrBook[i].date > 0 && usrBook[i].id > 0) printf("| ID: %-35d| ", usrBook[i].id);
             }
             printf("\n");
             for (i = j; i < j + 3; i++) {            
-                if (usrBook[i].stock > 0) printf("|----------------------------------------| ");
+                if (usrBook[i].stock > 0 && usrBook[i].pages > 0 && usrBook[i].date > 0 && usrBook[i].id > 0) printf("|----------------------------------------| ");
             }
             printf("\n");
             for (i = j; i < j + 3; i++) {            
-                if (usrBook[i].stock > 0) printf("| %-39s| ", usrBook[i].author);
+                if (usrBook[i].stock > 0 && usrBook[i].pages > 0 && usrBook[i].date > 0 && usrBook[i].id > 0) printf("| %-39s| ", usrBook[i].author);
             }
             printf("\n");
             for (i = j; i < j + 3; i++)
             {            
-                if (usrBook[i].stock > 0) printf("| %-39s| ", usrBook[i].name);
+                if (usrBook[i].stock > 0 && usrBook[i].pages > 0 && usrBook[i].date > 0 && usrBook[i].id > 0) printf("| %-39s| ", usrBook[i].name);
             }
             printf("\n");
             for (i = j; i < j + 3; i++)
             {            
-                if (usrBook[i].stock > 0) printf("| Published: %-28d| ", usrBook[i].date);
+                if (usrBook[i].stock > 0 && usrBook[i].pages > 0 && usrBook[i].date > 0 && usrBook[i].id > 0) printf("| Published: %-28d| ", usrBook[i].date);
             }
             printf("\n");
             for (i = j; i < j + 3; i++)
             {            
-                if (usrBook[i].stock > 0) printf("| Pages: %-32d| ", usrBook[i].pages);
+                if (usrBook[i].stock > 0 && usrBook[i].pages > 0 && usrBook[i].date > 0 && usrBook[i].id > 0) printf("| Pages: %-32d| ", usrBook[i].pages);
             }
             printf("\n");
             for (i = j; i < j + 3; i++)
             {            
-                if (usrBook[i].stock > 0) printf("| ISBN: %-33s| ", usrBook[i].isbn);
+                if (usrBook[i].stock > 0 && usrBook[i].pages > 0 && usrBook[i].date > 0 && usrBook[i].id > 0) printf("| ISBN: %-33s| ", usrBook[i].isbn);
             }
             printf("\n");
             for (i = j; i < j + 3; i++) {            
-                if (usrBook[i].stock > 0) printf("| Amount to return: %-21d| ", usrBook[i].stock);
+                if (usrBook[i].stock > 0 && usrBook[i].pages > 0 && usrBook[i].date > 0 && usrBook[i].id > 0) printf("| Amount to return: %-21d| ", usrBook[i].stock);
             }
             printf("\n");
             for (i = j; i < j + 3; i++) {            
-                if (usrBook[i].stock > 0) printf("|----------------------------------------| ");
+                if (usrBook[i].stock > 0 && usrBook[i].pages > 0 && usrBook[i].date > 0 && usrBook[i].id > 0) printf("|----------------------------------------| ");
             }
             printf("\n\n");
             j += 3;
