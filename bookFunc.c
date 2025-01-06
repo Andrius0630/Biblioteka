@@ -294,3 +294,10 @@ void initializePasswd(User *users, char **bufferPasswd, unsigned short lineCount
         users[i].deleted = 0;
     }
 }
+
+void encrypt(char password[], int key) {
+    int i = 0;
+    for (i = 0; i < strlen(password); i++) {
+        password[i] -= key;
+    }
+}

@@ -68,3 +68,5 @@ void appendToUsr(char *author, char *name, char *date, char *pages, char *isbn, 
 void appendToPasswd(char *name, char *passwd);
 void modifyUsrMode(User *users, unsigned short lineCountPasswd, unsigned short userInUse);
 void updateFileUser(User *users, unsigned short lineCountPasswd);
+void encrypt(char password[], int key);
+void decrypt(char password[], int key);

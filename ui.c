@@ -755,7 +755,7 @@ void loginUser() {
         getUserInput(username, sizeof(username));
         printf("\t\t\t\t   Password: ");
         getUserInput(passwd, sizeof(passwd));
-
+        encrypt(passwd, 0xFACE);
         for (i = 0; i < lineCountPasswd; i++) {
             if (strcmp(users[i].name, username) == 0 && strcmp(users[i].passwd, passwd) == 0 && strcmp(users[i].name, "admin") == 0) {
                 found = 1;
@@ -775,7 +775,7 @@ void loginUser() {
             drawLogo();
             printf("\t\t\t\t\t   Login\n");
             printf("\n\n\n\t    Invalid username or password, please try again. %d attempts remaining. \n", attempts);
-            sleep(3);
+            sleep(1);
             
         }
             
@@ -816,7 +816,7 @@ void createUser() {
                 drawLogo();
                 printf("\t\t\t\t\t Register\n");
                 printf("\n\n\t\t\t  Username already exists! Try again.\n");
-                sleep(3);
+                sleep(2);
                 nameExists = 1;
                 break;
             }
@@ -834,16 +834,18 @@ void createUser() {
             drawLogo();
             printf("\t\t\t\t\t Register\n");
             printf("\n\n\t\t\t  Passwords do not match! Try again.\n");
-            sleep(3);
+            sleep(1);
             continue;
         }
+
+        encrypt(passwd, 0xFACE);
         appendToPasswd(name, passwd);
 
         system("clear");
         drawLogo();
         printf("\t\t\t\t\t Register\n");
         printf("\n\n\t\t\t\tUser created successfully!\n");
-        sleep(3);
+        sleep(2);
         success = 1;
     }
 
