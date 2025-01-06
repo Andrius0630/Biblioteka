@@ -2,14 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "booksStruct.h"
-
-/*
-    todo: 
-        1. login/signIn menu
-        2. regex search
-        3. add and delete books
-    bruh 💀💀💀
-*/
+#include <unistd.h>
+#include <math.h>
 
 void getUserInput(char *buffer, unsigned short size) {
     if (fgets(buffer, size, stdin)) {
@@ -122,7 +116,7 @@ void renderMainMenuUser(User *users, unsigned short lineCountPasswd, unsigned sh
                 system("clear");
                 drawLogo();
                 printf("\n\n\n\t\t    No such option available! Please try again.\n\n\n");
-                sleep(3);
+                sleep(1);
                 break;
         }
         for (i = 0; i < lineCount; i++) {
@@ -151,10 +145,10 @@ void renderMainMenuAdmin(User *users, unsigned short userInUse) {
         if (books == NULL) exit(9);
         initializeBooks(books, buffer, lineCount);
         system("clear");
-        printf("Biblioteka\n\nWelcome back, %s\n\n1.List all books available\n\n2.Modify or delete mode\n3.Add new book\n\n0.Logout\n\n\n", users[userInUse].name);
-
-        printf("Choose an option: ");
-        getUserInput(choice, sizeof(choice));
+        drawAdminLogo();
+        printf("\t\t\t\t     Welcome, %s\n\n1.List all books available\n\n2.Modify or delete mode\n3.Add new book\n\n0.Logout\n\n\n", users[userInUse].name);
+        printf("Select an option: ");
+       getUserInput(choice, sizeof(choice));
         switch (choice[0]) {
             case '1':
                 listBooks(books, lineCount);
@@ -168,8 +162,10 @@ void renderMainMenuAdmin(User *users, unsigned short userInUse) {
             case '0':
                 return;
             default:
-                printf("Wrong input! Press Enter to try again.\n");
-                getUserInput(choice, sizeof(choice));
+                system("clear");
+                drawAdminLogo();
+                printf("\n\n\n\t\t    No such option available! Please try again.\n\n\n");
+                sleep(1);
                 break;
         }
         for (i = 0; i < lineCount; i++) {
@@ -182,44 +178,139 @@ void renderMainMenuAdmin(User *users, unsigned short userInUse) {
 
 void listBooks(Book *books, unsigned short lineCount) {
     char choice[ARRAY_MAX];
-    unsigned short i = 0;
+    unsigned short i = 0, j = 0;
     int pageCount = 1;
-    int booksPrinted = 0;
+    int linesPrinted = 0;
+    double temp = lineCount;
+    temp = ceil(temp/3.0);
     system("clear");
     drawLogo();
     printf("\t\t\t\t       Book list\n\n\n");
-
     printf("Currently available books: \n\n");
-    printf("|----------------------------------------|\n");
-    printf("|Page %-35d|\n", pageCount);
-    for (i = 0; i < lineCount; i++) {
-        if (books[i].stock > 0) {
-            printf("|----------------------------------------|\n");
-            printf("| %-39s|\n", books[i].name);
-            printf("| %-39s|\n", books[i].author);
-            printf("| Published: %-28d|\n", books[i].date);
-            printf("| ISBN: %-33s|\n", books[i].isbn);
-            printf("| Remaining in stock: %-19d|\n", books[i].stock);
-            booksPrinted++;
-            if (booksPrinted % 5 == 0) {
-                printf("|----------------------------------------|\n");
-                printf("\n\n\nPress ENTER for next page");
+
+    printf("PAGE %d\n\n", pageCount);
+    while (j <= lineCount) {
+        for (i = j; i < j + 3; i++) {
+            if (books[i].stock > 0) {
+                printf("|----------------------------------------| ");
+            } 
+        }
+        printf("\n");
+        for (i = j; i < j + 3; i++) {
+            if (books[i].stock > 0) {
+                printf("| ID: %-35d| ", books[i].id);
+            } 
+        }
+        printf("\n");
+        for (i = j; i < j + 3; i++) {
+            if (books[i].stock > 0) {
+                printf("|----------------------------------------| ");
+            } 
+        }
+        printf("\n");
+        for (i = j; i < j + 3; i++) {
+            if (books[i].stock > 0) printf("| %-39s| ", books[i].author);
+        }
+        printf("\n");
+        for (i = j; i < j + 3; i++) {
+            if (books[i].stock > 0) printf("| %-39s| ", books[i].name);
+        }
+        printf("\n");
+        for (i = j; i < j + 3; i++) {
+            if (books[i].stock > 0) printf("| Published: %-28d| ", books[i].date);
+        }
+        printf("\n");
+        for (i = j; i < j + 3; i++) {
+            if (books[i].stock > 0) printf("| Pages: %-32d| ", books[i].pages);
+        }
+        printf("\n");
+        for (i = j; i < j + 3; i++) {
+            if (books[i].stock > 0) printf("| ISBN: %-33s| ", books[i].isbn);
+        }
+        printf("\n");
+        for (i = j; i < j + 3; i++) {
+            if (books[i].stock > 0) printf("| Remaining in stock: %-19d| ", books[i].stock);
+        }
+        printf("\n");
+        for (i = j; i < j + 3; i++) {
+            if (books[i].stock > 0) {
+                printf("|----------------------------------------| ");
+            } 
+        }
+
+        printf("\n\n");
+        linesPrinted++;
+        j += 3;
+
+        if (lineCount <= 9) {
+            if (linesPrinted == temp) {
+                printf("Press ENTER to return...");
                 getUserInput(choice, sizeof(choice));
-                pageCount++;
-                system("clear");
-                drawLogo();
-                printf("\t\t\t\t       Book list\n\n\n");
-                printf("Currently available books: \n\n");
-                printf("|----------------------------------------|\n");
-                printf("|Page %-35d|\n", pageCount);
+                return;
+            }
+            continue;
         }
-
+        else if (j % 9 == 0 && pageCount == 1) {
+            printf("\n2. Next page\n0. Exit\n");
+            getUserInput(choice, sizeof(choice));
+            switch (atoi(choice)) {
+                case 2:
+                    pageCount++;
+                    system("clear");
+                    drawLogo();
+                    printf("\t\t\t\t       Book list\n\n\n");
+                    printf("Currently available books: \n\n");
+                    printf("PAGE %d\n\n", pageCount);
+                    break;
+                default:
+                    return;
+            }
         }
+        else if (j % 9 == 0) {
+            printf("\n1. Previous page\n2. Next page\n0. Exit\n");
+            getUserInput(choice, sizeof(choice));
+            switch (atoi(choice)) {
+                case 1:
+                    pageCount--;
+                    j -= 18;
+                    linesPrinted = j/3;
+                    system("clear");
+                    drawLogo();
+                    printf("\t\t\t\t       Book list\n\n\n");
+                    printf("Currently available books: \n\n");
+                    printf("PAGE %d\n\n", pageCount);
+                    break;
+                case 2:
+                    pageCount++;
+                    system("clear");
+                    drawLogo();
+                    printf("\t\t\t\t       Book list\n\n\n");
+                    printf("Currently available books: \n\n");
+                    printf("PAGE %d\n\n", pageCount);
+                    break;
+                default:
+                    return;
+            }
+        }
+        else if (j >= lineCount) {
+            printf("\n1. Previous page\n0. Exit\n");
+            getUserInput(choice, sizeof(choice));
+            switch (atoi(choice)) {
+                case 1:
+                    j -= 18 - ((pageCount*9) - ((linesPrinted*3)));
+                    pageCount--;
+                    linesPrinted = j/3;
+                    system("clear");
+                    drawLogo();
+                    printf("\t\t\t\t       Book list\n\n\n");
+                    printf("Currently available books: \n\n");
+                    printf("PAGE %d\n\n", pageCount);
+                    break;
+                default:
+                    return;
+            }
+        } 
     }
-    printf("|----------------------------------------|\n");
-
-    printf("\n\n\nPress ENTER to return");
-    getUserInput(choice, sizeof(choice));
 }
 
 void findBook(Book *books, unsigned short lineCount) {
@@ -229,27 +320,69 @@ void findBook(Book *books, unsigned short lineCount) {
     drawLogo();
     printf("\t\t\t\t     Find a book\n\n");
     printf("Enter an author, book name or ISBN: ");
-    unsigned short i = 0;
+    unsigned short i = 0, j = 0;
 
     getUserInput(choice, sizeof(choice));
     system("clear");
     drawLogo();
     printf("\t\t\t\t     Find a book\n\n");
     printf("\nSearch results:\n\n");
-    for (i = 0; i < lineCount; i++) {
-        if (strcmp(books[i].author, choice) == 0 || strcmp(books[i].name, choice) == 0 || strcmp(books[i].isbn, choice) == 0) {
-                printf("|----------------------------------------|\n");
-                printf("| %-39s|\n", books[i].name);
-                printf("| %-39s|\n", books[i].author);
-                printf("| Published: %-28d|\n", books[i].date);
-                printf("| ISBN: %-33s|\n", books[i].isbn);
-                printf("| Remaining in stock: %-19d|\n", books[i].stock);
+
+    while (j <= lineCount) {
+        for (i = j; i < j + 3; i++) {
+            if (strcmp(books[i].author, choice) == 0 || strcmp(books[i].name, choice) == 0 || strcmp(books[i].isbn, choice) == 0) {
+                printf("|----------------------------------------| ");
                 found = 1;
+            } 
         }
-        if (i == lineCount - 1 && found) {
-            printf("|----------------------------------------|\n");
+        printf("\n");
+        for (i = j; i < j + 3; i++) {
+            if (strcmp(books[i].author, choice) == 0 || strcmp(books[i].name, choice) == 0 || strcmp(books[i].isbn, choice) == 0) {
+                printf("| ID: %-35d| ", books[i].id);
+            } 
         }
+        printf("\n");
+        for (i = j; i < j + 3; i++) {
+            if (strcmp(books[i].author, choice) == 0 || strcmp(books[i].name, choice) == 0 || strcmp(books[i].isbn, choice) == 0) {
+                printf("|----------------------------------------| ");
+            } 
+        }
+        printf("\n");
+        for (i = j; i < j + 3; i++) {
+            if (strcmp(books[i].author, choice) == 0 || strcmp(books[i].name, choice) == 0 || strcmp(books[i].isbn, choice) == 0) printf("| %-39s| ", books[i].author);
+        }
+        printf("\n");
+        for (i = j; i < j + 3; i++) {
+            if (strcmp(books[i].author, choice) == 0 || strcmp(books[i].name, choice) == 0 || strcmp(books[i].isbn, choice) == 0) printf("| %-39s| ", books[i].name);
+        }
+        printf("\n");
+        for (i = j; i < j + 3; i++) {
+            if (strcmp(books[i].author, choice) == 0 || strcmp(books[i].name, choice) == 0 || strcmp(books[i].isbn, choice) == 0) printf("| Published: %-28d| ", books[i].date);
+        }
+        printf("\n");
+        for (i = j; i < j + 3; i++) {
+            if (strcmp(books[i].author, choice) == 0 || strcmp(books[i].name, choice) == 0 || strcmp(books[i].isbn, choice) == 0) printf("| Pages: %-32d| ", books[i].pages);
+        }
+        printf("\n");
+        for (i = j; i < j + 3; i++) {
+            if (strcmp(books[i].author, choice) == 0 || strcmp(books[i].name, choice) == 0 || strcmp(books[i].isbn, choice) == 0) printf("| ISBN: %-33s| ", books[i].isbn);
+        }
+        printf("\n");
+        for (i = j; i < j + 3; i++) {
+            if (strcmp(books[i].author, choice) == 0 || strcmp(books[i].name, choice) == 0 || strcmp(books[i].isbn, choice) == 0) printf("| Remaining in stock: %-19d| ", books[i].stock);
+        }
+        printf("\n");
+        for (i = j; i < j + 3; i++) {
+            if (strcmp(books[i].author, choice) == 0 || strcmp(books[i].name, choice) == 0 || strcmp(books[i].isbn, choice) == 0) {
+                printf("|----------------------------------------| ");
+            } 
+        }
+
+        printf("\n\n");
+        j += 3;
     }
+
+
     if(!found) printf("Nothing was found!\n");
 
     printf("\n\n\nPress ENTER to return");
@@ -265,19 +398,61 @@ void takeBook(Data *usrBook, unsigned short lineCountData, Book *books, unsigned
     system("clear");
     drawLogo();
     printf("\t\t\t\t       Taking a book\n\n\n");
+
+
     printf("Books available to take:\n\n");
-    for (i = 0; i < lineCount; i++) {
-        if (books[i].stock > 0) {
-            printf("|----------------------------------------|\n");
-            printf("| ID: %-35d|\n", books[i].id);
-            printf("| %-39s|\n", books[i].name);
-            printf("| %-39s|\n", books[i].author);
-            printf("| Published: %-28d|\n", books[i].date);
-            printf("| ISBN: %-33s|\n", books[i].isbn);
-            printf("| Remaining in stock: %-19d|\n", books[i].stock);
+    while (j <= lineCount) {
+        for (i = j; i < j + 3; i++) {
+            if (books[i].stock > 0) {
+                printf("|----------------------------------------| ");
+            } 
         }
+        printf("\n");
+        for (i = j; i < j + 3; i++) {
+            if (books[i].stock > 0) {
+                printf("| ID: %-35d| ", books[i].id);
+            } 
+        }
+        printf("\n");
+        for (i = j; i < j + 3; i++) {
+            if (books[i].stock > 0) {
+                printf("|----------------------------------------| ");
+            } 
+        }
+        printf("\n");
+        for (i = j; i < j + 3; i++) {
+            if (books[i].stock > 0) printf("| %-39s| ", books[i].author);
+        }
+        printf("\n");
+        for (i = j; i < j + 3; i++) {
+            if (books[i].stock > 0) printf("| %-39s| ", books[i].name);
+        }
+        printf("\n");
+        for (i = j; i < j + 3; i++) {
+            if (books[i].stock > 0) printf("| Published: %-28d| ", books[i].date);
+        }
+        printf("\n");
+        for (i = j; i < j + 3; i++) {
+            if (books[i].stock > 0) printf("| Pages: %-32d| ", books[i].pages);
+        }
+        printf("\n");
+        for (i = j; i < j + 3; i++) {
+            if (books[i].stock > 0) printf("| ISBN: %-33s| ", books[i].isbn);
+        }
+        printf("\n");
+        for (i = j; i < j + 3; i++) {
+            if (books[i].stock > 0) printf("| Remaining in stock: %-19d| ", books[i].stock);
+        }
+        printf("\n");
+        for (i = j; i < j + 3; i++) {
+            if (books[i].stock > 0) {
+                printf("|----------------------------------------| ");
+            } 
+        }
+
+        printf("\n\n");
+        j += 3;
     }
-    printf("|----------------------------------------|\n");
     if (!i) {
         system("clear");
         drawLogo();
@@ -288,7 +463,7 @@ void takeBook(Data *usrBook, unsigned short lineCountData, Book *books, unsigned
     }
     
 
-    printf("\n\nEnter the ID of the book you wish to take. Enter 0 to exit: ");
+    printf("Enter the ID of the book you wish to take. Enter 0 to exit: ");
     getUserInput(choice, sizeof(choice));
     id = atoi(choice);
     if (atoi(choice) == 0) return;
@@ -333,30 +508,68 @@ void returnBook(Data *usrBook, unsigned short lineCountData, Book *books, unsign
     char pages[ARRAY_MAX];
     char date[ARRAY_MAX];
     char found = 0;
-    unsigned short i = 0, id = 0, j = 0;
+    unsigned short i = 0, id = 0, j = 0, x = 0;
     system("clear");
     drawLogo();
     printf("\t\t\t\t       Returning a book\n\n\n");
-    printf("Books available to return:\n\n");
-    for (i = 0; i < lineCountData; i++) {
-        if (usrBook[i].stock > 0) {
-            printf("|----------------------------------------|\n");
-            printf("| ID: %-35d|\n", usrBook[i].id);
-            printf("| %-39s|\n", usrBook[i].name);
-            printf("| %-39s|\n", usrBook[i].author);
-            printf("| Published: %-28d|\n", usrBook[i].date);
-            printf("| ISBN: %-33s|\n", usrBook[i].isbn);
-        }
-    }
-        printf("|----------------------------------------|\n");
-    if (!i)
+    printf("Currently available books to return: \n\n");
+    if (!lineCountData)
     {
         system("clear");
         drawLogo();
         printf("\t\t\t\t       Returning a book\n\n\n");
-        printf("You have no books to return! Press ENTER to return...\n");
+        printf("\nYou have no books to return!\n\nPress ENTER to return...\n");
         getUserInput(choice, sizeof(choice));
         return;
+    } else {
+        while (j < lineCountData) {
+            for (i = j; i < j + 3; i++) {            
+                if (usrBook[i].stock > 0) printf("|----------------------------------------| ");
+
+            }
+            printf("\n");
+            for (i = j; i < j + 3; i++) {            
+                if (usrBook[i].stock > 0) printf("| ID: %-35d| ", usrBook[i].id);
+            }
+            printf("\n");
+            for (i = j; i < j + 3; i++) {            
+                if (usrBook[i].stock > 0) printf("|----------------------------------------| ");
+            }
+            printf("\n");
+            for (i = j; i < j + 3; i++) {            
+                if (usrBook[i].stock > 0) printf("| %-39s| ", usrBook[i].author);
+            }
+            printf("\n");
+            for (i = j; i < j + 3; i++)
+            {            
+                if (usrBook[i].stock > 0) printf("| %-39s| ", usrBook[i].name);
+            }
+            printf("\n");
+            for (i = j; i < j + 3; i++)
+            {            
+                if (usrBook[i].stock > 0) printf("| Published: %-28d| ", usrBook[i].date);
+            }
+            printf("\n");
+            for (i = j; i < j + 3; i++)
+            {            
+                if (usrBook[i].stock > 0) printf("| Pages: %-32d| ", usrBook[i].pages);
+            }
+            printf("\n");
+            for (i = j; i < j + 3; i++)
+            {            
+                if (usrBook[i].stock > 0) printf("| ISBN: %-33s| ", usrBook[i].isbn);
+            }
+            printf("\n");
+            for (i = j; i < j + 3; i++) {            
+                if (usrBook[i].stock > 0) printf("| Amount to return: %-21d| ", usrBook[i].stock);
+            }
+            printf("\n");
+            for (i = j; i < j + 3; i++) {            
+                if (usrBook[i].stock > 0) printf("|----------------------------------------| ");
+            }
+            printf("\n\n");
+            j += 3;
+        }
     }
     
 
@@ -371,7 +584,7 @@ void returnBook(Data *usrBook, unsigned short lineCountData, Book *books, unsign
                     system("clear");
                     drawLogo();
                     printf("\t\t\t\t       Returning a book\n\n\n");
-                    printf("You have returned a book with the ID %d. Press ENTER to continue...\n", id);
+                    printf("You have returned the book with the ID: %d. Press ENTER to continue...\n", id);
                     getUserInput(choice, sizeof(choice));
                     found = 1;
                     books[j].stock++;         
@@ -381,12 +594,11 @@ void returnBook(Data *usrBook, unsigned short lineCountData, Book *books, unsign
                 }
             }
         }
-        if (!found && usrBook[id-1].stock > 0)
-        {
+        if (!found && usrBook[id-1].stock > 0) {
             system("clear");
             drawLogo();
             printf("\t\t\t\t       Returning a book\n\n\n");
-            printf("You have returned a book with the ID %d. Press ENTER to continue...\n", id);
+            printf("You have returned the book with the ID: %d. Press Enter to continue...\n", id);
             getUserInput(choice, sizeof(choice));
             usrBook[id-1].stock--;
             sprintf(pages, "%d", usrBook[id-1].pages);
@@ -491,6 +703,8 @@ void addNewMode() {
     char stock[ARRAY_MAX];
     char choice[ARRAY_MAX];
     system("clear");
+    drawAdminLogo();
+    printf("\t\t\t\t     Adding new book\n\n");
     printf("Enter author: ");
     getUserInput(author, sizeof(author));
 
@@ -509,7 +723,11 @@ void addNewMode() {
     printf("Enter how many books will be in stock: ");
     getUserInput(stock, sizeof(stock));
 
-    printf("\nSuccess!. Press Enter to continue...");
+
+    system("clear");
+    drawAdminLogo();
+    printf("\t\t\t\t     Adding new book\n\n");
+    printf("\n\t\t\tSuccess!. Press Enter to continue...");
     getUserInput(choice, sizeof(choice));
 
     appendToFile(author, name, date, pages, isbn, stock);
@@ -733,8 +951,11 @@ void modifyUsrMode(User *users, unsigned short lineCountPasswd, unsigned short u
                     break;
                 }
             default:
-                printf("Wrong input! Press Enter to try again.\n");
-                getUserInput(choice, sizeof(choice));
+                system("clear");
+                drawLogo();
+                printf("\t\t\t\t   Account management\n\n\n");
+                printf("\n\n\n\t\t    No such option available! Please try again.\n\n\n");
+                sleep(3);
                 break;
         }
     }
