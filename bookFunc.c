@@ -295,14 +295,14 @@ void initializePasswd(User *users, char **bufferPasswd, unsigned short lineCount
     }
 }
 
-void encrypt(char password[], int key) {
-    int i = 0;
+void encrypt(char *password, short key) {
+    unsigned char i = 0;
     for (i = 0; i < strlen(password); i++) {
         password[i] -= key;
     }
 }
-void decrypt(char password[], int key) {
-    int i = 0;
+void decrypt(char *password, short key) {
+    unsigned char i = 0;
     for (i = 0; i < strlen(password); i++) {
         password[i] += key;
     }

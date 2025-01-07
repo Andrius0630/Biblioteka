@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "booksStruct.h"
-#include <unistd.h>
 #include <math.h>
+
 
 void getUserInput(char *buffer, unsigned short size) {
     if (fgets(buffer, size, stdin)) {
@@ -37,8 +37,8 @@ void renderLogIn() {
             default:
                 system("clear");
                 drawLogo();
-                printf("\n\n\n\t\t    No such option available! Please try again.\n\n\n");
-                sleep(3);
+                printf("\n\n\n\t\t    No such option available! Press ENTER to try again...\n\n\n");
+                getUserInput(choice, sizeof(choice));
                 break;
         }
         
@@ -55,7 +55,6 @@ void renderMainMenuUser(User *users, unsigned short lineCountPasswd, unsigned sh
         char **buffer = NULL;
         char **usrBookBuffer = NULL;
 
-        decrypt(users[userInUse].name, 0xFACE);
 
         readFile(&lineCount, &buffer);
         readFileUsr(&lineCountData, &usrBookBuffer, users, userInUse);
@@ -72,7 +71,6 @@ void renderMainMenuUser(User *users, unsigned short lineCountPasswd, unsigned sh
         drawLogo();
         printf("\t\t\t\t     Welcome, %s\n\n1. Find a book\n2. Take a book\n3. Return a book\n4. View all available books\n\n\n5. Manage account\n0. Logout\n\n\n", users[userInUse].name);
         printf("Select an option: ");
-        encrypt(users[userInUse].name, 0xFACE);
 
         getUserInput(choice, sizeof(choice));
         switch (choice[0]) {
@@ -118,8 +116,8 @@ void renderMainMenuUser(User *users, unsigned short lineCountPasswd, unsigned sh
             default:
                 system("clear");
                 drawLogo();
-                printf("\n\n\n\t\t    No such option available! Please try again.\n\n\n");
-                sleep(1);
+                printf("\n\n\n\t\t    No such option available! Press ENTER to try again...\n\n\n");
+                getUserInput(choice, sizeof(choice));
                 break;
         }
         for (i = 0; i < lineCount; i++) {
@@ -136,7 +134,7 @@ void renderMainMenuUser(User *users, unsigned short lineCountPasswd, unsigned sh
     }
 }
 
-void renderMainMenuAdmin(User *users, unsigned short userInUse) {
+void renderMainMenuAdmin() {
     unsigned short lineCount, i;
     char choice[ARRAY_MAX];
     while (1) {
@@ -149,7 +147,7 @@ void renderMainMenuAdmin(User *users, unsigned short userInUse) {
         initializeBooks(books, buffer, lineCount);
         system("clear");
         drawAdminLogo();
-        printf("\t\t\t\t     Welcome, %s\n\n1.List all books available\n\n2.Modify or delete mode\n3.Add new book\n\n0.Logout\n\n\n", users[userInUse].name);
+        printf("\t\t\t\t     Welcome, %s\n\n1.List all books available\n\n2.Modify or delete mode\n3.Add new book\n\n0.Logout\n\n\n", ADMIN);
         printf("Select an option: ");
        getUserInput(choice, sizeof(choice));
         switch (choice[0]) {
@@ -167,8 +165,8 @@ void renderMainMenuAdmin(User *users, unsigned short userInUse) {
             default:
                 system("clear");
                 drawAdminLogo();
-                printf("\n\n\n\t\t    No such option available! Please try again.\n\n\n");
-                sleep(1);
+                printf("\n\n\n\t\t    No such option available! Press ENTER to try again...\n\n\n");
+                getUserInput(choice, sizeof(choice));
                 break;
         }
         for (i = 0; i < lineCount; i++) {
@@ -511,7 +509,7 @@ void returnBook(Data *usrBook, unsigned short lineCountData, Book *books, unsign
     char pages[ARRAY_MAX];
     char date[ARRAY_MAX];
     char found = 0;
-    unsigned short i = 0, id = 0, j = 0, x = 0;
+    unsigned short i = 0, id = 0, j = 0;
     system("clear");
     drawLogo();
     printf("\t\t\t\t       Returning a book\n\n\n");
@@ -601,7 +599,7 @@ void returnBook(Data *usrBook, unsigned short lineCountData, Book *books, unsign
             system("clear");
             drawLogo();
             printf("\t\t\t\t       Returning a book\n\n\n");
-            printf("You have returned the book with the ID: %d. Press Enter to continue...\n", id);
+            printf("You have returned the book with the ID: %d. Press ENTER to continue...\n", id);
             getUserInput(choice, sizeof(choice));
             usrBook[id-1].stock--;
             sprintf(pages, "%d", usrBook[id-1].pages);
@@ -642,7 +640,7 @@ void modifyMode(Book *books, unsigned short lineCount) {
                             getUserInput(choice, sizeof(choice));
                             strcpy(books[id].author, choice);
                             updateFile(books, lineCount);
-                            printf("Changes saved! Press Enter to continue...\n");
+                            printf("Changes saved! Press ENTER to continue...\n");
                             getUserInput(choice, sizeof(choice));
                             break;
                         case '2':
@@ -650,7 +648,7 @@ void modifyMode(Book *books, unsigned short lineCount) {
                             getUserInput(choice, sizeof(choice));
                             strcpy(books[id].name, choice);
                             updateFile(books, lineCount);
-                            printf("Changes saved! Press Enter to continue...\n");
+                            printf("Changes saved! Press ENTER to continue...\n");
                             getUserInput(choice, sizeof(choice));
                             break;
                         case '3':
@@ -658,7 +656,7 @@ void modifyMode(Book *books, unsigned short lineCount) {
                             getUserInput(choice, sizeof(choice));
                             books[id].date = atoi(choice);
                             updateFile(books, lineCount);
-                            printf("Changes saved! Press Enter to continue...\n");
+                            printf("Changes saved! Press ENTER to continue...\n");
                             getUserInput(choice, sizeof(choice));
                             break;
                         case '4':
@@ -666,7 +664,7 @@ void modifyMode(Book *books, unsigned short lineCount) {
                             getUserInput(choice, sizeof(choice));
                             books[id].pages = atoi(choice);
                             updateFile(books, lineCount);
-                            printf("Changes saved! Press Enter to continue...\n");
+                            printf("Changes saved! Press ENTER to continue...\n");
                             getUserInput(choice, sizeof(choice));
                             break;
                         case '5':
@@ -674,7 +672,7 @@ void modifyMode(Book *books, unsigned short lineCount) {
                             getUserInput(choice, sizeof(choice));
                             strcpy(books[id].isbn, choice);
                             updateFile(books, lineCount);
-                            printf("Changes saved! Press Enter to continue...\n");
+                            printf("Changes saved! Press ENTER to continue...\n");
                             getUserInput(choice, sizeof(choice));
                             break;
                         case '6':
@@ -682,11 +680,11 @@ void modifyMode(Book *books, unsigned short lineCount) {
                             getUserInput(choice, sizeof(choice));
                             books[id].stock = atoi(choice);
                             updateFile(books, lineCount);
-                            printf("Changes saved! Press Enter to continue...\n");
+                            printf("Changes saved! Press ENTER to continue...\n");
                             getUserInput(choice, sizeof(choice));
                             break;
                         default:
-                            printf("Wrong input! Press Enter to show list again.\n");
+                            printf("Wrong input! Press ENTER to show list again.\n");
                             getUserInput(choice, sizeof(choice));
                             break;
                     }
@@ -730,7 +728,7 @@ void addNewMode() {
     system("clear");
     drawAdminLogo();
     printf("\t\t\t\t     Adding new book\n\n");
-    printf("\n\t\t\tSuccess!. Press Enter to continue...");
+    printf("\n\t\t\tSuccess!. Press ENTER to continue...");
     getUserInput(choice, sizeof(choice));
 
     appendToFile(author, name, date, pages, isbn, stock);
@@ -750,8 +748,6 @@ void loginUser() {
 
     while (attempts > 0)
     {
-        char encryptedAdmin[] = "admin";
-        encrypt(encryptedAdmin, 0xFACE);
         system("clear");
         drawLogo();
         printf("\t\t\t\t\t   Login\n");
@@ -759,21 +755,31 @@ void loginUser() {
         printf("\n\n\t\t\t\t   Name: ");
         getUserInput(username, sizeof(username));
         printf("\t\t\t\t   Password: ");
-        encrypt(username, 0xFACE);
         getUserInput(passwd, sizeof(passwd));
-        encrypt(passwd, 0xFACE);
-
+        
+        if (strcmp(username, ADMIN) == 0 && strcmp(username, ADMIN_PASSWD) == 0) {
+            renderMainMenuAdmin();
+            for (i = 0; i < lineCountPasswd; i++) {
+                free(bufferPasswd[i]);
+            }
+            free(bufferPasswd);
+            free(users);
+            return;
+        } else {
+            encrypt(username, 0xFACE);
+            encrypt(passwd, 0xFACE);
+        }
+        
         for (i = 0; i < lineCountPasswd; i++) {
-            if (strcmp(users[i].name, username) == 0 && strcmp(users[i].passwd, passwd) == 0 && strcmp(users[i].name, encryptedAdmin) == 0) {
+            if (strcmp(users[i].name, username) == 0 && strcmp(users[i].passwd, passwd) == 0) {
                 found = 1;
                 decrypt(users[i].name, 0xFACE);
-                renderMainMenuAdmin(users, i);
-                return;
-            }
-            if (strcmp(users[i].name, username) == 0 && strcmp(users[i].passwd, passwd) == 0 && strcmp(users[i].name, encryptedAdmin) != 0) {
-                found = 1;
                 renderMainMenuUser(users, lineCountPasswd, i);
-                encrypt(users[i].name, 0xFACE);
+                for (i = 0; i < lineCountPasswd; i++) {
+                    free(bufferPasswd[i]);
+                }
+                free(bufferPasswd);
+                free(users);
                 return;
             }
         }
@@ -782,9 +788,9 @@ void loginUser() {
             attempts--;
             system("clear");
             drawLogo();
-            printf("\t\t\t\t\t   Login\n");
+            printf("\t\t\t\t\t   Login %s\n", username);
             printf("\n\n\n\t    Invalid username or password, please try again. %d attempts remaining.\n\t\t\t\tPress ENTER to try again\n", attempts);
-            getc(stdin);
+            getUserInput(passwd, sizeof(passwd));
         }
             
     }
@@ -824,8 +830,8 @@ void createUser() {
                 system("clear");
                 drawLogo();
                 printf("\t\t\t\t\t Register\n");
-                printf("\n\n\t\t\t  Username already exists! Try again.\n");
-                sleep(2);
+                printf("\n\n\t\t\t  Username already exists! Press ENTER to try again...\n");
+                getUserInput(choice, sizeof(choice));
                 nameExists = 1;
                 break;
             }
@@ -842,8 +848,8 @@ void createUser() {
             system("clear");
             drawLogo();
             printf("\t\t\t\t\t Register\n");
-            printf("\n\n\t\t\t  Passwords do not match! Try again.\n");
-            sleep(1);
+            printf("\n\n\t\t\t  Passwords do not match! Press ENTER to try again...\n");
+            getUserInput(choice, sizeof(choice));
             continue;
         }
 
@@ -853,8 +859,8 @@ void createUser() {
         system("clear");
         drawLogo();
         printf("\t\t\t\t\t Register\n");
-        printf("\n\n\t\t\t\tUser created successfully!\n");
-        sleep(2);
+        printf("\n\n\t\t\t\tUser created successfully! Press ENTER to continue...\n");
+        getUserInput(choice, sizeof(choice));
         success = 1;
     }
 
@@ -876,15 +882,14 @@ void modifyUsrMode(User *users, unsigned short lineCountPasswd, unsigned short u
         system("clear");
         drawLogo();
         printf("\t\t\t\t   Account management\n\n\n");
-        decrypt(users[userInUse].name, 0xFACE);
         printf("Currently logged in as: %s\n\n", users[userInUse].name);
         encrypt(users[userInUse].name, 0xFACE);
-
         printf("1. Change username\n2. Change password\n3. Delete account\n");
         printf("\n\n\nSelect an option (0 to exit): ");
         getUserInput(choice, sizeof(choice));
         switch (choice[0]) {
             case '0':
+                decrypt(users[userInUse].name, 0xFACE);
                 return;
             case '1':
                 system("clear");
@@ -892,18 +897,30 @@ void modifyUsrMode(User *users, unsigned short lineCountPasswd, unsigned short u
                 printf("\t\t\t\t   Account management\n\n");
                 printf("\n\n\t\t\t\t  Enter new username: ");
                 getUserInput(choice, sizeof(choice));
-                encrypt(choice, 0xFACE);
-                for (i = 0; i < lineCountPasswd; i++) {
-                    if (strcmp(users[i].name, choice) == 0) {
-                        system("clear");
-                        drawLogo();
-                        printf("\t\t\t\t   Account management\n\n\n");
-                        printf("\n\t\t\t  Username already exists! Try again.\n");
-                        sleep(3);
-                        nameExists = 1;
-                        break;
+                if (strcmp(choice, ADMIN) != 0) {
+                    encrypt(choice, 0xFACE);
+                    for (i = 0; i < lineCountPasswd; i++) {
+                        if (strcmp(users[i].name, choice) == 0) {
+                            nameExists = 1;
+                            system("clear");
+                            drawLogo();
+                            printf("\t\t\t\t   Account management\n\n\n");
+                            printf("\n\t\t\t  Username already exists! Press ENTER to try again...\n");
+                            getUserInput(choice, sizeof(choice));
+                            decrypt(users[userInUse].name, 0xFACE);
+                            break;
+                        }
                     }
+                } else {
+                    nameExists = 1;
+                    system("clear");
+                    drawLogo();
+                    printf("\t\t\t\t   Account management\n\n\n");
+                    printf("\n\t\t\t  Username already exists! Press ENTER to try again...\n");
+                    getUserInput(choice, sizeof(choice));
+                    decrypt(users[userInUse].name, 0xFACE);
                 }
+                
                 if (nameExists == 1) break;
                 else {
                     strcpy(users[userInUse].name, choice);
@@ -913,6 +930,7 @@ void modifyUsrMode(User *users, unsigned short lineCountPasswd, unsigned short u
                     printf("\t\t\t\t   Account management\n\n\n");
                     printf("\t\t\tChanges saved! Press ENTER to continue...\n");
                     getUserInput(choice, sizeof(choice));
+                    decrypt(users[userInUse].name, 0xFACE);
                     break;
                 }
             case '2':
@@ -924,17 +942,17 @@ void modifyUsrMode(User *users, unsigned short lineCountPasswd, unsigned short u
 
                 printf("\t\t\t\t  Confirm new password: ");
                 getUserInput(passwd, sizeof(passwd));
-                encrypt(choice, 0xFACE);
-                encrypt(passwd, 0xFACE);
 
 
                 if (strcmp(passwd, choice) != 0) {
                     system("clear");
                     drawLogo();
-                    printf("\n\n\t\t\t  Passwords do not match! Try again.\n");
-                    sleep(3);
+                    printf("\n\n\t\t\t  Passwords do not match! Press ENTER to try again...\n");
+                    getUserInput(choice, sizeof(choice));
+                    decrypt(users[userInUse].name, 0xFACE);
                     break;
                 } else {
+                    encrypt(choice, 0xFACE);
                     strcpy(users[userInUse].passwd, choice);
                     updateFileUser(users, lineCountPasswd);
                     system("clear");
@@ -942,6 +960,7 @@ void modifyUsrMode(User *users, unsigned short lineCountPasswd, unsigned short u
                     printf("\t\t\t\t   Account management\n\n\n");
                     printf("\t\t\tChanges saved! Press ENTER to continue...\n");
                     getUserInput(choice, sizeof(choice));
+                    decrypt(users[userInUse].name, 0xFACE);
                     break;
                 }
             case '3':
@@ -959,6 +978,7 @@ void modifyUsrMode(User *users, unsigned short lineCountPasswd, unsigned short u
                     printf("\t\t\t\t   Account management\n\n\n");
                     printf("\t\t   Account has been deleted! Press ENTER to continue...\n");
                     getUserInput(choice, sizeof(choice));
+                    decrypt(users[userInUse].name, 0xFACE);
                     return;
                 } else {
                     system("clear");
@@ -966,14 +986,16 @@ void modifyUsrMode(User *users, unsigned short lineCountPasswd, unsigned short u
                     printf("\t\t\t\t   Account management\n\n\n");
                     printf("\t\tAccount deletion canceled! Press ENTER to continue...\n");
                     getUserInput(choice, sizeof(choice));
+                    decrypt(users[userInUse].name, 0xFACE);
                     break;
                 }
             default:
                 system("clear");
                 drawLogo();
                 printf("\t\t\t\t   Account management\n\n\n");
-                printf("\n\n\n\t\t    No such option available! Please try again.\n\n\n");
-                sleep(3);
+                printf("\n\n\n\t\t    No such option available! Press ENTER to try again...\n\n\n");
+                getUserInput(choice, sizeof(choice));
+                decrypt(users[userInUse].name, 0xFACE);
                 break;
         }
     }

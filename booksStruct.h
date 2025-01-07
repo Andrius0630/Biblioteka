@@ -4,6 +4,9 @@
 #define BOOKS_FILE "books.txt"
 #define PASSWD_FILE "passwd"
 
+#define ADMIN "admin"
+#define ADMIN_PASSWD "admin"
+
 typedef struct
 {
     unsigned short id;
@@ -34,7 +37,7 @@ typedef struct
     char deleted;
 }User;
 
-void renderMainMenuAdmin(User *users, unsigned short userInUse);
+void renderMainMenuAdmin();
 void renderMainMenuUser(User *users, unsigned short lineCountPasswd, unsigned short userInUse);
 void getUserInput(char *buffer, unsigned short size);
 
@@ -68,5 +71,5 @@ void appendToUsr(char *author, char *name, char *date, char *pages, char *isbn, 
 void appendToPasswd(char *name, char *passwd);
 void modifyUsrMode(User *users, unsigned short lineCountPasswd, unsigned short userInUse);
 void updateFileUser(User *users, unsigned short lineCountPasswd);
-void encrypt(char password[], int key);
-void decrypt(char password[], int key);
+void encrypt(char *password, short key);
+void decrypt(char *password, short key);
