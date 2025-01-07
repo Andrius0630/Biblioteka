@@ -3,6 +3,8 @@
 #define READ_SIZE 50
 #define BOOKS_FILE "books.txt"
 #define PASSWD_FILE "passwd"
+#define WIN_CLS "cls"
+#define CLEAR "clear"
 
 #define ADMIN "admin"
 #define ADMIN_PASSWD "admin"
