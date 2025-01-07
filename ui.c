@@ -210,11 +210,11 @@ void listBooks(Book *books, unsigned short lineCount) {
         }
         printf("\n");
         for (i = j; i < j + 3; i++) {
-            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0 && sizeof(books[i].isbn) < 15) printf("| %-39s| ", books[i].author);
+            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0 && sizeof(books[i].isbn) < 15) printf("| Author: %-31s| ", books[i].author);
         }
         printf("\n");
         for (i = j; i < j + 3; i++) {
-            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0 && sizeof(books[i].isbn) < 15) printf("| %-39s| ", books[i].name);
+            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0 && sizeof(books[i].isbn) < 15)  printf("| Name: %-33s| ", books[i].name);
         }
         printf("\n");
         for (i = j; i < j + 3; i++) {
@@ -498,12 +498,12 @@ void returnBook(Data *usrBook, unsigned short lineCountData, Book *books, unsign
             }
             printf("\n");
             for (i = j; i < j + 3; i++) {            
-                if (usrBook[i].stock > 0 && usrBook[i].pages > 0 && usrBook[i].date > 0 && usrBook[i].id > 0 && sizeof(usrBook[i].isbn) < 15) printf("| %-39s| ", usrBook[i].author);
+                if (usrBook[i].stock > 0 && usrBook[i].pages > 0 && usrBook[i].date > 0 && usrBook[i].id > 0 && sizeof(usrBook[i].isbn) < 15) printf("| Author: %-31s| ", usrBook[i].author);
             }
             printf("\n");
             for (i = j; i < j + 3; i++)
             {            
-                if (usrBook[i].stock > 0 && usrBook[i].pages > 0 && usrBook[i].date > 0 && usrBook[i].id > 0 && sizeof(usrBook[i].isbn) < 15) printf("| %-39s| ", usrBook[i].name);
+                if (usrBook[i].stock > 0 && usrBook[i].pages > 0 && usrBook[i].date > 0 && usrBook[i].id > 0 && sizeof(usrBook[i].isbn) < 15) printf("| Name: %-33s| ", usrBook[i].name);
             }
             printf("\n");
             for (i = j; i < j + 3; i++)
