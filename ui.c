@@ -378,8 +378,6 @@ void findBook(Book *books, unsigned short lineCount) {
                 printf("|----------------------------------------| ");
             } 
         }
-
-        printf("\n\n");
         j += 3;
     }
 
