@@ -8,5 +8,5 @@ Jane Austen,Sense and Sensibility,1811,409,9781503219731,10
 Gabriel Garcia Marquez,Love in the Time of Cholera,1985,368,9780307389732,1
 giga,aboba,1970,123,8888888888888,3
 kasper,jasper,1980,321,9999999999999,2
-andrius,paulius,2005,777,999999999999,2
-star,wars,2000,666,323232323232,2
+andrius,paulius,2005,777,999999999999,1
+star,wars,2000,666,323232323232,1
