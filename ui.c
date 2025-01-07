@@ -192,49 +192,49 @@ void listBooks(Book *books, unsigned short lineCount) {
     printf("PAGE %d\n\n", pageCount);
     while (j <= lineCount) {
         for (i = j; i < j + 3; i++) {
-            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0) {
+            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0 && sizeof(books[i].isbn) < 15) {
                 printf("|----------------------------------------| ");
             } 
         }
         printf("\n");
         for (i = j; i < j + 3; i++) {
-            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0) {
+            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0 && sizeof(books[i].isbn) < 15) {
                 printf("| ID: %-35d| ", books[i].id);
             } 
         }
         printf("\n");
         for (i = j; i < j + 3; i++) {
-            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0) {
+            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0 && sizeof(books[i].isbn) < 15) {
                 printf("|----------------------------------------| ");
             } 
         }
         printf("\n");
         for (i = j; i < j + 3; i++) {
-            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0) printf("| %-39s| ", books[i].author);
+            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0 && sizeof(books[i].isbn) < 15) printf("| %-39s| ", books[i].author);
         }
         printf("\n");
         for (i = j; i < j + 3; i++) {
-            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0) printf("| %-39s| ", books[i].name);
+            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0 && sizeof(books[i].isbn) < 15) printf("| %-39s| ", books[i].name);
         }
         printf("\n");
         for (i = j; i < j + 3; i++) {
-            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0) printf("| Published: %-28d| ", books[i].date);
+            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0 && sizeof(books[i].isbn) < 15) printf("| Published: %-28d| ", books[i].date);
         }
         printf("\n");
         for (i = j; i < j + 3; i++) {
-            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0) printf("| Pages: %-32d| ", books[i].pages);
+            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0 && sizeof(books[i].isbn) < 15) printf("| Pages: %-32d| ", books[i].pages);
         }
         printf("\n");
         for (i = j; i < j + 3; i++) {
-            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0) printf("| ISBN: %-33s| ", books[i].isbn);
+            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0 && sizeof(books[i].isbn) < 15) printf("| ISBN: %-33s| ", books[i].isbn);
         }
         printf("\n");
         for (i = j; i < j + 3; i++) {
-            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0) printf("| Remaining in stock: %-19d| ", books[i].stock);
+            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0 && sizeof(books[i].isbn) < 15) printf("| Remaining in stock: %-19d| ", books[i].stock);
         }
         printf("\n");
         for (i = j; i < j + 3; i++) {
-            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0) {
+            if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0 && sizeof(books[i].isbn) < 15) {
                 printf("|----------------------------------------| ");
             } 
         }
@@ -321,7 +321,7 @@ void findBook(Book *books, unsigned short lineCount) {
     drawLogo();
     printf("\t\t\t\t     Find a book\n\n");
     printf("Enter an author, book name or ISBN: ");
-    unsigned short i = 0, j = 0;
+    unsigned short i = 0;
 
     getUserInput(choice, sizeof(choice));
     system("clear");
@@ -329,58 +329,21 @@ void findBook(Book *books, unsigned short lineCount) {
     printf("\t\t\t\t     Find a book\n\n");
     printf("\nSearch results:\n\n");
 
-    while (j <= lineCount) {
-        for (i = j; i < j + 3; i++) {
-            if (strcmp(books[i].author, choice) == 0 || strcmp(books[i].name, choice) == 0 || strcmp(books[i].isbn, choice) == 0) {
-                printf("|----------------------------------------| ");
-                found = 1;
-            } 
-        }
-        printf("\n");
-        for (i = j; i < j + 3; i++) {
-            if (strcmp(books[i].author, choice) == 0 || strcmp(books[i].name, choice) == 0 || strcmp(books[i].isbn, choice) == 0) {
-                printf("| ID: %-35d| ", books[i].id);
-            } 
-        }
-        printf("\n");
-        for (i = j; i < j + 3; i++) {
-            if (strcmp(books[i].author, choice) == 0 || strcmp(books[i].name, choice) == 0 || strcmp(books[i].isbn, choice) == 0) {
-                printf("|----------------------------------------| ");
-            } 
-        }
-        printf("\n");
-        for (i = j; i < j + 3; i++) {
-            if (strcmp(books[i].author, choice) == 0 || strcmp(books[i].name, choice) == 0 || strcmp(books[i].isbn, choice) == 0) printf("| %-39s| ", books[i].author);
-        }
-        printf("\n");
-        for (i = j; i < j + 3; i++) {
-            if (strcmp(books[i].author, choice) == 0 || strcmp(books[i].name, choice) == 0 || strcmp(books[i].isbn, choice) == 0) printf("| %-39s| ", books[i].name);
-        }
-        printf("\n");
-        for (i = j; i < j + 3; i++) {
-            if (strcmp(books[i].author, choice) == 0 || strcmp(books[i].name, choice) == 0 || strcmp(books[i].isbn, choice) == 0) printf("| Published: %-28d| ", books[i].date);
-        }
-        printf("\n");
-        for (i = j; i < j + 3; i++) {
-            if (strcmp(books[i].author, choice) == 0 || strcmp(books[i].name, choice) == 0 || strcmp(books[i].isbn, choice) == 0) printf("| Pages: %-32d| ", books[i].pages);
-        }
-        printf("\n");
-        for (i = j; i < j + 3; i++) {
-            if (strcmp(books[i].author, choice) == 0 || strcmp(books[i].name, choice) == 0 || strcmp(books[i].isbn, choice) == 0) printf("| ISBN: %-33s| ", books[i].isbn);
-        }
-        printf("\n");
-        for (i = j; i < j + 3; i++) {
-            if (strcmp(books[i].author, choice) == 0 || strcmp(books[i].name, choice) == 0 || strcmp(books[i].isbn, choice) == 0) printf("| Remaining in stock: %-19d| ", books[i].stock);
-        }
-        printf("\n");
-        for (i = j; i < j + 3; i++) {
-            if (strcmp(books[i].author, choice) == 0 || strcmp(books[i].name, choice) == 0 || strcmp(books[i].isbn, choice) == 0) {
-                printf("|----------------------------------------| ");
-            } 
-        }
-        j += 3;
+    for (i = 0; i < lineCount; i++) {
+        if (strcmp(books[i].author, choice) == 0 || strcmp(books[i].name, choice) == 0 || strcmp(books[i].isbn, choice) == 0) {
+            printf("|----------------------------------------| \n");
+            printf("| ID: %-35d| \n", books[i].id);
+            printf("|----------------------------------------| \n");
+            printf("| Author: %-31s| \n", books[i].author);
+            printf("| Name: %-33s| \n", books[i].name);
+            printf("| Published: %-28d| \n", books[i].date);
+            printf("| Pages: %-32d| \n", books[i].pages);
+            printf("| ISBN: %-33s| \n", books[i].isbn);
+            printf("| Remaining in stock: %-19d| \n", books[i].stock);
+            printf("|----------------------------------------| \n\n");
+            found = 1;
+        } 
     }
-
 
     if(!found) printf("Nothing was found!\n");
 
@@ -751,7 +714,7 @@ void loginUser() {
             attempts--;
             system("clear");
             drawLogo();
-            printf("\t\t\t\t\t   Login %s\n", username);
+            printf("\t\t\t\t\t   Login\n");
             printf("\n\n\n\t    Invalid username or password, please try again. %d attempts remaining.\n\t\t\t\tPress ENTER to try again\n", attempts);
             getUserInput(passwd, sizeof(passwd));
         }
