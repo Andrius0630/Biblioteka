@@ -327,7 +327,7 @@ void findBook(Book *books, unsigned short lineCount) {
     system(WIN_CLS);
     drawLogo();
     printf("\t\t\t\t     Find a book\n\n");
-    printf("\nSearch results:\n\n");
+    printf("\nSearch results for \"%s\":\n\n", choice);
 
     for (i = 0; i < lineCount; i++) {
         if (strcmp(books[i].author, choice) == 0 || strcmp(books[i].name, choice) == 0 || strcmp(books[i].isbn, choice) == 0) {
