@@ -379,12 +379,12 @@ void takeBook(Data *usrBook, unsigned short lineCountData, Book *books, unsigned
             }
             printf("\n");
             for (i = j; i < j + 3; i++) {            
-                if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0 && sizeof(books[i].isbn) < 15) printf("| %-39s| ", books[i].author);
+                if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0 && sizeof(books[i].isbn) < 15) printf("| Author: %-31s| ", books[i].author);
             }
             printf("\n");
             for (i = j; i < j + 3; i++)
             {            
-                if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0 && sizeof(books[i].isbn) < 15) printf("| %-39s| ", books[i].name);
+                if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0 && sizeof(books[i].isbn) < 15) printf("| Name: %-33s| ", books[i].name);
             }
             printf("\n");
             for (i = j; i < j + 3; i++)
