@@ -3,8 +3,10 @@ George Orwell,1984,1949,328,9780451524935,1
 Haruki Murakami,Kafka on the Shore,2002,505,9781400079278,8
 George Orwell,Animal Farm,1945,112,9780451526342,2
 Jane Austen,Pride and Prejudice,1813,432,9781503290563,2
-Gabriel Garcia Marquez,One Hundred Years of Solitude,1967,417,9780060883287,5
+Gabriel Garcia Marquez,One Hundred Years of Solitude,1967,417,9780060883287,4
 Jane Austen,Sense and Sensibility,1811,409,9781503219731,10
 Gabriel Garcia Marquez,Love in the Time of Cholera,1985,368,9780307389732,1
 giga,aboba,1970,123,8888888888888,3
 kasper,jasper,1980,321,9999999999999,2
+andrius,paulius,2005,777,999999999999,2
+star,wars,2000,666,323232323232,2
