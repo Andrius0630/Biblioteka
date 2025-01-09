@@ -403,7 +403,7 @@ void takeBook(Data *usrBook, unsigned short lineCountData, Book *books, unsigned
             }
             printf("\n");
             for (i = j; i < j + 3; i++) {            
-                if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0 && sizeof(books[i].isbn) < 15) printf("| Amount to return: %-21d| ", books[i].stock);
+                if (books[i].stock > 0 && books[i].pages > 0 && books[i].date > 0 && books[i].id > 0 && sizeof(books[i].isbn) < 15) printf("| In stock: %-29d| ", books[i].stock);
             }
             printf("\n");
             for (i = j; i < j + 3; i++) {            

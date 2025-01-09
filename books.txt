@@ -6,7 +6,6 @@ Jane Austen,Pride and Prejudice,1813,432,9781503290563,2
 Gabriel Garcia Marquez,One Hundred Years of Solitude,1967,417,9780060883287,4
 Jane Austen,Sense and Sensibility,1811,409,9781503219731,10
 giga,aboba,1970,123,8888888888888,3
-kasper,jasper,1980,321,9999999999999,2
+kasper,jasper,1980,321,9999999999999,3
 andrius,paulius,2005,777,999999999999,1
-star,wars,2000,666,323232323232,1
 Gabriel Garcia Marquez,Love in the Time of Cholera,1985,368,9780307389732,1
